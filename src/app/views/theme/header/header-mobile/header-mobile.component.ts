@@ -19,21 +19,11 @@ export class HeaderMobileComponent implements OnInit {
     togglerState: 'kt-header-mobile__toolbar-topbar-toggler--active'
   };
 
-  /**
-   * Component constructor
-   *
-   * @param layoutConfigService: LayoutConfigService
-   */
+
   constructor(private layoutConfigService: LayoutConfigService) {
   }
 
-  /**
-   * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
-   */
 
-  /**
-   * On init
-   */
   ngOnInit() {
     this.headerLogo = this.layoutConfigService.getLogo();
     this.asideDisplay = this.layoutConfigService.getConfig('aside.self.display');

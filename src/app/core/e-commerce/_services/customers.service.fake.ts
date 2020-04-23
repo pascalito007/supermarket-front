@@ -39,7 +39,7 @@ export class CustomersService {
   // items => filtered/sorted result
   findCustomers(queryParams: QueryParamsModel): Observable<QueryResultsModel> {
     // This code imitates server calls
-    return this.http.get<CustomerModel[]>(CUSTOMERS_URL).pipe(
+    return this.http.get<any>(CUSTOMERS_URL).pipe(
       mergeMap(res => {
         const customers = res._embedded.customers.map(customer => {
           customer.id = uuid().substring(0, 8);

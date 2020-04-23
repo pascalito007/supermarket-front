@@ -76,12 +76,12 @@ export class ProductsService {
   }
 
   // DELETE => delete the product from the server
-  deleteProduct(productId: number): Observable<ProductModel> {
+  deleteProduct(productId: string): Observable<ProductModel> {
     const url = `${API_PRODUCTS_URL}/${productId}`;
     return this.http.delete<ProductModel>(url);
   }
 
-  deleteProducts(ids: number[] = []): Observable<any> {
+  deleteProducts(ids: string[] = []): Observable<any> {
     const tasks$ = [];
     const length = ids.length;
     // tslint:disable-next-line:prefer-const

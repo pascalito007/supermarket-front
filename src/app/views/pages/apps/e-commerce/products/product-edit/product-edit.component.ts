@@ -228,7 +228,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
    * @param isNew: boolean
    * @param id: number
    */
-  refreshProduct(isNew: boolean = false, id = 0) {
+  refreshProduct(isNew: boolean = false, id = '') {
     this.loadingSubject.next(false);
     let url = this.router.url;
     if (!isNew) {

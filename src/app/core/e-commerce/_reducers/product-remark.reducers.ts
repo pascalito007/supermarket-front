@@ -8,7 +8,7 @@ import {ProductRemarkModel} from '../_models/product-remark.model';
 import {QueryParamsModel} from '../../_base/crud';
 
 export interface ProductRemarksState extends EntityState<ProductRemarkModel> {
-  productId: number;
+  productId: string;
   loading: boolean;
   totalCount: number;
   lastCreatedProductRemarkId: string;

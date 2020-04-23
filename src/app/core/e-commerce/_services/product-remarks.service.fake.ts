@@ -33,7 +33,7 @@ export class ProductRemarksService {
 
   // READ
   getAllProductRemarksByProductId(
-    productId: number
+    productId: string
   ): Observable<ProductRemarkModel[]> {
     return this.http
       .get<ProductRemarkModel[]>(API_PRODUCTREMARKS_URL)
@@ -52,7 +52,7 @@ export class ProductRemarksService {
 
   findProductRemarks(
     queryParams: QueryParamsModel,
-    productId: number
+    productId: string
   ): Observable<QueryResultsModel> {
     return this.getAllProductRemarksByProductId(productId).pipe(
       mergeMap(res => {
