@@ -27,8 +27,8 @@ export const locale = {
 				CONTACT: '接触',
 			},
 			LOGIN: {
-				TITLE: 'Create Account',
-				BUTTON: 'Sign In',
+				TITLE: 'Créer un compte',
+				BUTTON: 'Se connecter',
 			},
 			FORGOT: {
 				TITLE: 'Forgotten Password?',

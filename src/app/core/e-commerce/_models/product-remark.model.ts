@@ -1,22 +1,22 @@
-import { BaseModel } from '../../_base/crud';
+import {BaseModel} from '../../_base/crud';
 
 export class ProductRemarkModel extends BaseModel {
-	id: number;
-	carId: number;
-	text: string;
-	type: number; // Info, Note, Reminder
-	dueDate: string;
-	_isEditMode: boolean;
+  id: string;
+  carId: string;
+  text: string;
+  type: number; // Info, Note, Reminder
+  dueDate: string;
+  _isEditMode: boolean;
 
-	// Refs
-	_carName: string;
+  // Refs
+  _carName: string;
 
-	clear(carId: number) {
-		this.id = undefined;
-		this.carId = carId;
-		this.text = '';
-		this.type = 0;
-		this.dueDate = '';
-		this._isEditMode = false;
-	}
+  clear(carId: string) {
+    this.id = undefined;
+    this.carId = carId;
+    this.text = '';
+    this.type = 0;
+    this.dueDate = '';
+    this._isEditMode = false;
+  }
 }

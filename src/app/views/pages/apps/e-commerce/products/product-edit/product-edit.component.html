@@ -3,28 +3,20 @@
 		<ng-container ktPortletTools>
 			<a (click)="goBackWithoutId()" class="btn btn-secondary kt-margin-r-10"  mat-raised-button matTooltip="Back to the products list">
 				<i class="la la-arrow-left"></i>
-				<span class="kt-hidden-mobile">Back</span>
+				<span class="kt-hidden-mobile">Retour</span>
 			</a>
 			<a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" [disabled]="selectedTab !== 0" mat-raised-button matTooltip="Reset changes">
 				<i class="la la-cog"></i>
-				<span class="kt-hidden-mobile">Reset</span>
+				<span class="kt-hidden-mobile">Reinitialiser</span>
 			</a>
 			<a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)" mat-raised-button matTooltip="Save & Continue">
-				<span class="kt-hidden-mobile">Save</span>
+				<span class="kt-hidden-mobile">Enregistrer</span>
 			</a>
-			<button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
-				<mat-icon>more_vert</mat-icon>
-			</button>
-			<mat-menu #menu="matMenu">
-				<button mat-menu-item color="primary" (click)="onSumbit(true)">Save & Exit</button>
-				<button mat-menu-item color="primary">Save & Duplicate</button>
-				<button mat-menu-item color="primary" (click)="onSumbit(false)">Save & Continue</button>
-			</mat-menu>
 		</ng-container>
 	</kt-portlet-header>
 	<kt-portlet-body>
 		<mat-tab-group [(selectedIndex)]="selectedTab" *ngIf="product">
-			<mat-tab label="Basic info">
+			<mat-tab label="Informations de base">
 				<ng-template matTabContent>
 					<div *ngIf="product">
 						<!--begin::Form-->
@@ -40,134 +32,85 @@
 
 										<div class="col-md-4 kt-margin-bottom-10-mobile">
 											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Enter Model" formControlName="model">
+												<input matInput placeholder="Saisir Nom de produit" formControlName="product_name">
 												<mat-error>
-													Model is
-													<strong>required</strong>
+													Nom de produit est
+													<strong>obligatoire</strong>
 												</mat-error>
-												<mat-hint align="start">Please enter
-													<strong>Model</strong>
+												<mat-hint align="start">Renseignez svp
+													<strong>Nom de produit</strong>
 												</mat-hint>
 											</mat-form-field>
 										</div>
 										<div class="col-md-4 kt-margin-bottom-10-mobile">
 											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Enter Manufacture" formControlName="manufacture" [matAutocomplete]="manuf">
+												<input matInput placeholder="Saisisr le Fabricant" formControlName="manufacturer" [matAutocomplete]="manuf">
 												<mat-autocomplete #manuf="matAutocomplete">
 													<mat-option *ngFor="let manufacture of filteredManufactures | async" [value]="manufacture">
 														{{ manufacture }}
 													</mat-option>
 												</mat-autocomplete>
 												<mat-error>
-													Manufacture is
-													<strong>required</strong>
+													Fabricant est
+													<strong>obligatoire</strong>
 												</mat-error>
-												<mat-hint align="start">Please enter
-													<strong>Manufacture</strong>
+												<mat-hint align="start">Renseignez svp
+													<strong>Fabricant</strong>
 												</mat-hint>
 											</mat-form-field>
 										</div>
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<mat-select placeholder="Enter Model year" formControlName="modelYear">
-													<mat-option value="{{year}}" *ngFor="let year of availableYears;">{{year}}</mat-option>
-												</mat-select>
-												<mat-error>
-													Model year
-													<strong>required</strong>
-												</mat-error>
-												<mat-hint align="start">Please enter
-													<strong>Model year</strong>
-												</mat-hint>
-											</mat-form-field>
-										</div>
+                    <div class="col-md-4 kt-margin-bottom-10-mobile">
+                      <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="Saisir Quantité en stock" formControlName="number_available_in_stock">
+                        <mat-error>
+                          Quantité en stock est
+                          <strong>obligatoire</strong>
+                        </mat-error>
+                        <mat-hint align="start">Renseignez svp
+                          <strong>Quantité en stock</strong>
+                        </mat-hint>
+                      </mat-form-field>
+                    </div>
 									</div>
 								</div>
 
-								<div class="kt-form__group">
-									<div class="row">
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Enter Mileage" formControlName="mileage">
-												<mat-error>
-													Mileage is
-													<strong>required</strong>
-												</mat-error>
-												<mat-hint align="start">Please enter
-													<strong>Mileage</strong>
-												</mat-hint>
-											</mat-form-field>
-										</div>
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Enter Color" formControlName="color" [matAutocomplete]="col">
-												<mat-autocomplete #col="matAutocomplete">
-													<mat-option *ngFor="let col of filteredColors | async" [value]="col">
-														{{ col }}
-													</mat-option>
-												</mat-autocomplete>
-												<mat-error>
-													Color
-													<strong>required</strong>
-												</mat-error>
-												<mat-hint align="start">Please enter
-													<strong>Color</strong>
-												</mat-hint>
-											</mat-form-field>
-										</div>
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Enter Price" formControlName="price">
-												<span matPrefix>$&nbsp;</span>
-												<mat-error>
-													Price is
-													<strong>required</strong>
-												</mat-error>
-												<mat-hint align="start">Please enter
-													<strong>Price</strong>
-												</mat-hint>
-											</mat-form-field>
-										</div>
+                <div class="kt-form__group">
+                  <div class="row">
+                    <div class="col-md-6 kt-margin-bottom-10-mobile">
+                      <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="Saisir le Prix" formControlName="price">
+                        <span matPrefix>€&nbsp;</span>
+                        <mat-error>
+                          Prix est
+                          <strong>obligatoire</strong>
+                        </mat-error>
+                        <mat-hint align="start">Renseignez svp
+                          <strong>Prix</strong>
+                        </mat-hint>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-6 kt-margin-bottom-10-mobile">
+                      <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="Saisir le code du Rayon">
+                        <mat-error>
+                          Rayon est
+                          <strong>obligatoire</strong>
+                        </mat-error>
+                        <mat-hint align="start">Renseignez svp
+                          <strong>Rayon</strong>
+                        </mat-hint>
+                      </mat-form-field>
+                    </div>
 									</div>
 
-								</div>
-
-								<div class="kt-form__group">
-									<div class="row">
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Enter VIN code" formControlName="VINCode">
-												<mat-error>
-													VIN Code is
-													<strong>required</strong>
-												</mat-error>
-												<mat-hint align="start">Please enter
-													<strong>VIN Code</strong>
-												</mat-hint>
-											</mat-form-field>
-										</div>
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<div>Condition:</div>
-											<mat-radio-group formControlName="condition" class="example-radio-group">
-												<mat-radio-button class="example-radio-button" value="0">New</mat-radio-button>
-												<mat-radio-button class="example-radio-button" value="1">Used</mat-radio-button>
-											</mat-radio-group>
-										</div>
-										<div class="col-md-4">
-											<div>Status:</div>
-											<mat-radio-group formControlName="status" class="example-radio-group">
-												<mat-radio-button class="example-radio-button" value="0">Selling</mat-radio-button>
-												<mat-radio-button class="example-radio-button" value="1">Sold</mat-radio-button>
-											</mat-radio-group>
-										</div>
-									</div>
 								</div>
 
 								<div class="kt-form__group">
 									<div class="row">
 										<div class="col-md-12 kt-margin-bottom-10-mobile">
 											<mat-form-field class="mat-form-field-fluid">
-												<textarea matInput rows="7" placeholder="Enter Description" formControlName="description"></textarea>
+												<textarea matInput rows="7" placeholder="Saisir la Description du produit" formControlName="product_description"></textarea>
 											</mat-form-field>
 										</div>
 									</div>
@@ -179,12 +122,12 @@
 					<!--end::Form-->
 				</ng-template>
 			</mat-tab>
-			<mat-tab label="Product remarks" [disabled]="!product || !product.id">
+			<mat-tab label="Informations Avis utilisateurs" [disabled]="!product">
 				<ng-template matTabContent>
 					<kt-remarks-list [productId$]="productId$"></kt-remarks-list>
 				</ng-template>
 			</mat-tab>
-			<mat-tab label="Product specifications" [disabled]="!product || !product.id">
+			<mat-tab label="Informations Vendeurs" [disabled]="!product">
 				<ng-template matTabContent>
 					<kt-specifications-list [productId$]="productId$"></kt-specifications-list>
 				</ng-template>

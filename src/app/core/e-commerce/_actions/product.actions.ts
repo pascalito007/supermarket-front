@@ -48,12 +48,12 @@ export class ProductsStatusUpdated implements Action {
 
 export class OneProductDeleted implements Action {
     readonly type = ProductActionTypes.OneProductDeleted;
-    constructor(public payload: { id: number }) {}
+    constructor(public payload: { id: string }) {}
 }
 
 export class ManyProductsDeleted implements Action {
     readonly type = ProductActionTypes.ManyProductsDeleted;
-    constructor(public payload: { ids: number[] }) {}
+    constructor(public payload: { ids: string[] }) {}
 }
 
 export class ProductsPageRequested implements Action {

@@ -15,8 +15,6 @@ import {LoadingBarModule} from '@ngx-loading-bar/core';
 // NGRX
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
-// Ngx DatePicker
-// import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 // Perfect Scrollbar
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 // SVG inline
@@ -39,79 +37,79 @@ import {ErrorPageComponent} from './content/error-page/error-page.component';
 import {PermissionEffects, permissionsReducer, RoleEffects, rolesReducer} from '../../core/auth';
 
 @NgModule({
-	declarations: [
-		BaseComponent,
-		FooterComponent,
+  declarations: [
+    BaseComponent,
+    FooterComponent,
 
-		// headers
-		HeaderComponent,
-		BrandComponent,
-		HeaderMobileComponent,
+    // headers
+    HeaderComponent,
+    BrandComponent,
+    HeaderMobileComponent,
 
-		// subheader
-		SubheaderComponent,
+    // subheader
+    SubheaderComponent,
 
-		// topbar components
-		TopbarComponent,
+    // topbar components
+    TopbarComponent,
 
-		// aside left menu components
-		AsideLeftComponent,
+    // aside left menu components
+    AsideLeftComponent,
 
-		// horizontal menu components
-		MenuHorizontalComponent,
+    // horizontal menu components
+    MenuHorizontalComponent,
 
-		ErrorPageComponent,
-	],
-	exports: [
-		BaseComponent,
-		FooterComponent,
+    ErrorPageComponent,
+  ],
+  exports: [
+    BaseComponent,
+    FooterComponent,
 
-		// headers
-		HeaderComponent,
-		BrandComponent,
-		HeaderMobileComponent,
+    // headers
+    HeaderComponent,
+    BrandComponent,
+    HeaderMobileComponent,
 
-		// subheader
-		SubheaderComponent,
+    // subheader
+    SubheaderComponent,
 
-		// topbar components
-		TopbarComponent,
+    // topbar components
+    TopbarComponent,
 
-		// aside left menu components
-		AsideLeftComponent,
+    // aside left menu components
+    AsideLeftComponent,
 
-		// horizontal menu components
-		MenuHorizontalComponent,
+    // horizontal menu components
+    MenuHorizontalComponent,
 
-		ErrorPageComponent,
-	],
-	providers: [
-		HtmlClassService,
-	],
-	imports: [
-		CommonModule,
-		RouterModule,
-		NgxPermissionsModule.forChild(),
-		StoreModule.forFeature('roles', rolesReducer),
-		StoreModule.forFeature('permissions', permissionsReducer),
-		EffectsModule.forFeature([PermissionEffects, RoleEffects]),
-		PagesModule,
-		PartialsModule,
-		CoreModule,
-		PerfectScrollbarModule,
-		FormsModule,
-		MatProgressBarModule,
-		MatTabsModule,
-		MatButtonModule,
-		MatTooltipModule,
-		TranslateModule.forChild(),
-		LoadingBarModule,
-		InlineSVGModule,
+    ErrorPageComponent,
+  ],
+  providers: [
+    HtmlClassService,
+  ],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NgxPermissionsModule.forChild(),
+    StoreModule.forFeature('roles', rolesReducer),
+    StoreModule.forFeature('permissions', permissionsReducer),
+    EffectsModule.forFeature([PermissionEffects, RoleEffects]),
+    PagesModule,
+    PartialsModule,
+    CoreModule,
+    PerfectScrollbarModule,
+    FormsModule,
+    MatProgressBarModule,
+    MatTabsModule,
+    MatButtonModule,
+    MatTooltipModule,
+    TranslateModule.forChild(),
+    LoadingBarModule,
+    InlineSVGModule,
 
-		// ng-bootstrap modules
-		NgbProgressbarModule,
-		NgbTooltipModule,
-	]
+    // ng-bootstrap modules
+    NgbProgressbarModule,
+    NgbTooltipModule,
+  ]
 })
 export class ThemeModule {
 }

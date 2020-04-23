@@ -48,12 +48,12 @@ export class CustomersStatusUpdated implements Action {
 
 export class OneCustomerDeleted implements Action {
     readonly type = CustomerActionTypes.OneCustomerDeleted;
-    constructor(public payload: { id: number }) {}
+    constructor(public payload: { id: string }) {}
 }
 
 export class ManyCustomersDeleted implements Action {
     readonly type = CustomerActionTypes.ManyCustomersDeleted;
-    constructor(public payload: { ids: number[] }) {}
+    constructor(public payload: { ids: string[] }) {}
 }
 
 export class CustomersPageRequested implements Action {

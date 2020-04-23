@@ -35,17 +35,17 @@ import {ThemeModule} from './views/theme/theme.module';
 import {PartialsModule} from './views/partials/partials.module';
 // Layout Services
 import {
-	DataTableService,
-	FakeApiService,
-	KtDialogService,
-	LayoutConfigService,
-	LayoutRefService,
-	MenuAsideService,
-	MenuConfigService,
-	MenuHorizontalService,
-	PageConfigService,
-	SplashScreenService,
-	SubheaderService
+  DataTableService,
+  FakeApiService,
+  KtDialogService,
+  LayoutConfigService,
+  LayoutRefService,
+  MenuAsideService,
+  MenuConfigService,
+  MenuHorizontalService,
+  PageConfigService,
+  SplashScreenService,
+  SubheaderService
 } from './core/_base/layout';
 // Auth
 import {AuthModule} from './views/pages/auth/auth.module';
@@ -63,92 +63,92 @@ import * as json from 'highlight.js/lib/languages/json';
 
 // tslint:disable-next-line:class-name
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-	wheelSpeed: 0.5,
-	swipeEasing: true,
-	minScrollbarLength: 40,
-	maxScrollbarLength: 300,
+  wheelSpeed: 0.5,
+  swipeEasing: true,
+  minScrollbarLength: 40,
+  maxScrollbarLength: 300,
 };
 
 export function initializeLayoutConfig(appConfig: LayoutConfigService) {
-	// initialize app by loading default demo layout config
-	return () => {
-		if (appConfig.getConfig() === null) {
-			appConfig.loadConfigs(new LayoutConfig().configs);
-		}
-	};
+  // initialize app by loading default demo layout config
+  return () => {
+    if (appConfig.getConfig() === null) {
+      appConfig.loadConfigs(new LayoutConfig().configs);
+    }
+  };
 }
 
 export function hljsLanguages(): HighlightLanguage[] {
-	return [
-		{name: 'typescript', func: typescript},
-		{name: 'scss', func: scss},
-		{name: 'xml', func: xml},
-		{name: 'json', func: json}
-	];
+  return [
+    {name: 'typescript', func: typescript},
+    {name: 'scss', func: scss},
+    {name: 'xml', func: xml},
+    {name: 'json', func: json}
+  ];
 }
 
 @NgModule({
-	declarations: [AppComponent],
-	imports: [
-		BrowserAnimationsModule,
-		BrowserModule,
-		AppRoutingModule,
-		HttpClientModule,
-		environment.isMockEnabled ? HttpClientInMemoryWebApiModule.forRoot(FakeApiService, {
-			passThruUnknownUrl: true,
-			dataEncapsulation: false
-		}) : [],
-		NgxPermissionsModule.forRoot(),
-		PartialsModule,
-		CoreModule,
-		OverlayModule,
-		StoreModule.forRoot(reducers, {metaReducers}),
-		EffectsModule.forRoot([]),
-		StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
-		StoreDevtoolsModule.instrument(),
-		AuthModule.forRoot(),
-		TranslateModule.forRoot(),
-		MatProgressSpinnerModule,
-		InlineSVGModule.forRoot(),
-		ThemeModule
-	],
-	exports: [],
-	providers: [
-		AuthService,
-		LayoutConfigService,
-		LayoutRefService,
-		MenuConfigService,
-		PageConfigService,
-		KtDialogService,
-		DataTableService,
-		SplashScreenService,
-		{
-			provide: PERFECT_SCROLLBAR_CONFIG,
-			useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-		},
-		{
-			provide: HAMMER_GESTURE_CONFIG,
-			useClass: GestureConfig
-		},
-		{
-			// layout config initializer
-			provide: APP_INITIALIZER,
-			useFactory: initializeLayoutConfig,
-			deps: [LayoutConfigService], multi: true
-		},
-		{
-			provide: HIGHLIGHT_OPTIONS,
-			useValue: {languages: hljsLanguages}
-		},
-		// template services
-		SubheaderService,
-		MenuHorizontalService,
-		MenuAsideService,
-		HttpUtilsService,
-		TypesUtilsService,
-		LayoutUtilsService,
-	],
-	bootstrap: [AppComponent]
+  declarations: [AppComponent],
+  imports: [
+    BrowserAnimationsModule,
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    environment.isMockEnabled ? HttpClientInMemoryWebApiModule.forRoot(FakeApiService, {
+      passThruUnknownUrl: true,
+      dataEncapsulation: false
+    }) : [],
+    NgxPermissionsModule.forRoot(),
+    PartialsModule,
+    CoreModule,
+    OverlayModule,
+    StoreModule.forRoot(reducers, {metaReducers}),
+    EffectsModule.forRoot([]),
+    StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
+    StoreDevtoolsModule.instrument(),
+    AuthModule.forRoot(),
+    TranslateModule.forRoot(),
+    MatProgressSpinnerModule,
+    InlineSVGModule.forRoot(),
+    ThemeModule
+  ],
+  exports: [],
+  providers: [
+    AuthService,
+    LayoutConfigService,
+    LayoutRefService,
+    MenuConfigService,
+    PageConfigService,
+    KtDialogService,
+    DataTableService,
+    SplashScreenService,
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    },
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: GestureConfig
+    },
+    {
+      // layout config initializer
+      provide: APP_INITIALIZER,
+      useFactory: initializeLayoutConfig,
+      deps: [LayoutConfigService], multi: true
+    },
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: {languages: hljsLanguages}
+    },
+    // template services
+    SubheaderService,
+    MenuHorizontalService,
+    MenuAsideService,
+    HttpUtilsService,
+    TypesUtilsService,
+    LayoutUtilsService,
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

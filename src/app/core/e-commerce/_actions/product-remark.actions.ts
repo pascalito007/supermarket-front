@@ -46,17 +46,17 @@ export class ProductRemarkStoreUpdated implements Action {
 
 export class OneProductRemarkDeleted implements Action {
     readonly type = ProductRemarkActionTypes.OneProductRemarkDeleted;
-    constructor(public payload: { id: number }) {}
+    constructor(public payload: { id: string }) {}
 }
 
 export class ManyProductRemarksDeleted implements Action {
     readonly type = ProductRemarkActionTypes.ManyProductRemarksDeleted;
-    constructor(public payload: { ids: number[] }) {}
+    constructor(public payload: { ids: string[] }) {}
 }
 
 export class ProductRemarksPageRequested implements Action {
     readonly type = ProductRemarkActionTypes.ProductRemarksPageRequested;
-    constructor(public payload: { page: QueryParamsModel, productId: number }) { }
+    constructor(public payload: { page: QueryParamsModel, productId: string }) { }
 }
 
 export class ProductRemarksPageLoaded implements Action {
