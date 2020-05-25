@@ -1,6 +1,4 @@
 import {BaseModel} from '../../_base/crud';
-import {ProductSpecificationModel} from './product-specification.model';
-import {ProductRemarkModel} from './product-remark.model';
 
 export class ProductModel extends BaseModel {
   id: string;
@@ -33,9 +31,6 @@ export class ProductModel extends BaseModel {
   customer_questions_and_answers: string;
   customer_reviews: string;
   sellers: string;
-
-  _specs: ProductSpecificationModel[];
-  _remarks: ProductRemarkModel[];
 
   clear() {
     this.model = '';

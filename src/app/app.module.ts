@@ -7,7 +7,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GestureConfig, MatProgressSpinnerModule} from '@angular/material';
 import {OverlayModule} from '@angular/cdk/overlay';
 // Angular in memory
-import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 // Perfect Scroll bar
 import {PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 // SVG inline
@@ -36,7 +35,6 @@ import {PartialsModule} from './views/partials/partials.module';
 // Layout Services
 import {
   DataTableService,
-  FakeApiService,
   KtDialogService,
   LayoutConfigService,
   LayoutRefService,
@@ -94,10 +92,6 @@ export function hljsLanguages(): HighlightLanguage[] {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    environment.isMockEnabled ? HttpClientInMemoryWebApiModule.forRoot(FakeApiService, {
-      passThruUnknownUrl: true,
-      dataEncapsulation: false
-    }) : [],
     NgxPermissionsModule.forRoot(),
     PartialsModule,
     CoreModule,

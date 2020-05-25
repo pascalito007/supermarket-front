@@ -4,8 +4,6 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
-// Fake API Angular-in-memory
-import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 // Translate Module
 import {TranslateModule} from '@ngx-translate/core';
 // NGRX
@@ -14,7 +12,6 @@ import {EffectsModule} from '@ngrx/effects';
 // UI
 import {PartialsModule} from '../../../partials/partials.module';
 // Core
-import {FakeApiService} from '../../../../core/_base/layout';
 // Auth
 import {ModuleGuard} from '../../../../core/auth';
 // Core => Services
@@ -25,12 +22,6 @@ import {
   productsReducer,
   ProductEffects,
   ProductsService,
-  productRemarksReducer,
-  ProductRemarkEffects,
-  ProductRemarksService,
-  productSpecificationsReducer,
-  ProductSpecificationEffects,
-  ProductSpecificationsService
 } from '../../../../core/e-commerce';
 // Core => Utils
 import {
@@ -54,9 +45,6 @@ import {CustomerEditDialogComponent} from './customers/customer-edit/customer-ed
 // Products
 import {ProductsListComponent} from './products/products-list/products-list.component';
 import {ProductEditComponent} from './products/product-edit/product-edit.component';
-import {RemarksListComponent} from './products/_subs/remarks/remarks-list/remarks-list.component';
-import {SpecificationsListComponent} from './products/_subs/specifications/specifications-list/specifications-list.component';
-import {SpecificationEditDialogComponent} from './products/_subs/specifications/specification-edit/specification-edit-dialog.component';
 // Orders
 import {OrdersListComponent} from './orders/orders-list/orders-list.component';
 import {OrderEditComponent} from './orders/order-edit/order-edit.component';
@@ -139,18 +127,10 @@ const routes: Routes = [
     MatTabsModule,
     MatTooltipModule,
     NgbProgressbarModule,
-    environment.isMockEnabled ? HttpClientInMemoryWebApiModule.forFeature(FakeApiService, {
-      passThruUnknownUrl: true,
-      dataEncapsulation: false
-    }) : [],
     StoreModule.forFeature('products', productsReducer),
     EffectsModule.forFeature([ProductEffects]),
     StoreModule.forFeature('customers', customersReducer),
     EffectsModule.forFeature([CustomerEffects]),
-    StoreModule.forFeature('productRemarks', productRemarksReducer),
-    EffectsModule.forFeature([ProductRemarkEffects]),
-    StoreModule.forFeature('productSpecifications', productSpecificationsReducer),
-    EffectsModule.forFeature([ProductSpecificationEffects]),
   ],
   providers: [
     ModuleGuard,
@@ -173,8 +153,6 @@ const routes: Routes = [
     LayoutUtilsService,
     HttpUtilsService,
     CustomersService,
-    ProductRemarksService,
-    ProductSpecificationsService,
     ProductsService,
     TypesUtilsService,
     LayoutUtilsService
@@ -185,7 +163,6 @@ const routes: Routes = [
     DeleteEntityDialogComponent,
     FetchEntityDialogComponent,
     UpdateStatusDialogComponent,
-    SpecificationEditDialogComponent
   ],
   declarations: [
     ECommerceComponent,
@@ -198,9 +175,6 @@ const routes: Routes = [
     // Products
     ProductsListComponent,
     ProductEditComponent,
-    RemarksListComponent,
-    SpecificationsListComponent,
-    SpecificationEditDialogComponent
   ]
 })
 export class ECommerceModule {

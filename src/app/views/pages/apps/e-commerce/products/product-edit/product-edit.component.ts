@@ -19,7 +19,6 @@ import {LayoutUtilsService, TypesUtilsService, MessageType} from '../../../../..
 import {
   selectLastCreatedProductId,
   selectProductById,
-  SPECIFICATIONS_DICTIONARY,
   ProductModel,
   ProductOnServerCreated,
   ProductUpdated,
