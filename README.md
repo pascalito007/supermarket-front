@@ -1,3 +1,9 @@
+# Supermarket 4.0
+This is a front end administration side for supermarket4.0 app required to validate 4PROJ module at SUPINFO
+International University - Paris Campus
+## Api management
+This app use Firebase Cloud Services to manage some of majore features
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
