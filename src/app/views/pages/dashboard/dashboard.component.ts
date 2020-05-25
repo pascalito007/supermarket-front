@@ -5,7 +5,6 @@ import {shuffle} from 'lodash';
 // Services
 // Widgets model
 import {LayoutConfigService, SparklineChartOptions} from '../../../core/_base/layout';
-import {Widget4Data} from '../../partials/content/widgets/widget4/widget4.component';
 
 @Component({
   selector: 'kt-dashboard',
@@ -17,10 +16,6 @@ export class DashboardComponent implements OnInit {
   chartOptions2: SparklineChartOptions;
   chartOptions3: SparklineChartOptions;
   chartOptions4: SparklineChartOptions;
-  widget4_1: Widget4Data;
-  widget4_2: Widget4Data;
-  widget4_3: Widget4Data;
-  widget4_4: Widget4Data;
 
   constructor(private layoutConfigService: LayoutConfigService) {
   }

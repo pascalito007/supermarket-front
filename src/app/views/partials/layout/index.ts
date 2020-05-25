@@ -2,7 +2,6 @@
 export { ScrollTopComponent } from './scroll-top/scroll-top.component';
 export { SearchResultComponent } from './search-result/search-result.component';
 export { SplashScreenComponent } from './splash-screen/splash-screen.component';
-export { StickyToolbarComponent } from './sticky-toolbar/sticky-toolbar.component';
 
 // Subheader components
 export { Subheader1Component } from './subheader/subheader1/subheader1.component';
