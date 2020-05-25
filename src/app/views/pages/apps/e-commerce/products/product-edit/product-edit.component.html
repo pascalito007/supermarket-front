@@ -122,16 +122,6 @@
 					<!--end::Form-->
 				</ng-template>
 			</mat-tab>
-			<mat-tab label="Informations Avis utilisateurs" [disabled]="!product">
-				<ng-template matTabContent>
-					<kt-remarks-list [productId$]="productId$"></kt-remarks-list>
-				</ng-template>
-			</mat-tab>
-			<mat-tab label="Informations Vendeurs" [disabled]="!product">
-				<ng-template matTabContent>
-					<kt-specifications-list [productId$]="productId$"></kt-specifications-list>
-				</ng-template>
-			</mat-tab>
 		</mat-tab-group>
 	</kt-portlet-body>
 </kt-portlet>
