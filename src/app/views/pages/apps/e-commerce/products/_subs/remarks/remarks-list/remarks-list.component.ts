@@ -366,10 +366,10 @@ export class RemarksListComponent implements OnInit, OnDestroy {
    * @param _item: ProductRemarkModel
    */
   deleteRemark(_item: ProductRemarkModel) {
-    const _title = 'Remark Delete';
-    const _description = 'Are you sure to permanently delete this remark?';
-    const _waitDesciption = 'Remark is deleting...';
-    const _deleteMessage = `Remark has been deleted`;
+    const _title = 'Suppression avis';
+    const _description = 'Etes vous sûr de supprimer cet avis?';
+    const _waitDesciption = 'Suppression en cours...';
+    const _deleteMessage = `Avis supprimé`;
 
     const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
     dialogRef.afterClosed().subscribe(res => {

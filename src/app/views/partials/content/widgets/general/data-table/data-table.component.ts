@@ -19,42 +19,17 @@ import {DataTableDataSource} from './data-table.data-source';
 export class DataTableComponent implements OnInit {
   // Public properties
   dataSource: DataTableDataSource;
-  displayedColumns = ['id', 'cManufacture', 'cModel', 'cMileage', 'cColor', 'cPrice', 'cCondition', 'cStatus'];
+  displayedColumns = ['uniq_id', 'product_name', 'manufacturer', 'number_available_in_stock', 'number_of_reviews', 'price'];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   selection = new SelectionModel<DataTableItemModel>(true, []);
 
-  /**
-   * Component constructor
-   *
-   * @param dataTableService: DataTableService
-   */
+
   constructor(private dataTableService: DataTableService) {
   }
 
-  /**
-   * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
-   */
 
-  /**
-   * On init
-   */
   ngOnInit() {
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
-    /* Data load will be triggered in two cases:
-    - when a pagination event occurs => this.paginator.page
-    - when a sort event occurs => this.sort.sortChange
-    **/
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        tap(() => {
-          this.loadItems();
-        })
-      )
-      .subscribe();
-
     // Init DataSource
     this.dataSource = new DataTableDataSource(this.dataTableService);
     // First load
@@ -71,7 +46,7 @@ export class DataTableComponent implements OnInit {
       {},
       this.sort.direction,
       this.sort.active,
-      this.paginator.pageIndex,
+      this.paginator && this.paginator.pageIndex,
       firstLoad ? 6 : this.paginator.pageSize
     );
     this.dataSource.loadItems(queryParams);

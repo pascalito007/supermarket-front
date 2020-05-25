@@ -49,6 +49,12 @@ export class MenuConfig {
             },
           ]
         },
+        {
+          title: 'Commandes Clients',
+          root: true,
+          alignment: 'left',
+          page: '/orders',
+        }
       ]
     },
     aside: {

@@ -3,23 +3,15 @@
 		<ng-container ktPortletTools>
 			<a [routerLink]="['../../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button matTooltip="Back to the users list">
 				<i class="la la-arrow-left"></i>
-				<span class="kt-hidden-mobile">Back</span>
+				<span class="kt-hidden-mobile">Retour</span>
 			</a>
 			<a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" [disabled]="selectedTab !== 0" mat-raised-button matTooltip="Reset changes">
 				<i class="la la-cog"></i>
-				<span class="kt-hidden-mobile">Reset</span>
+				<span class="kt-hidden-mobile">Reinitialiser</span>
 			</a>
 			<a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)" mat-raised-button matTooltip="Save & Continue">
-				<span class="kt-hidden-mobile">Save</span>
+				<span class="kt-hidden-mobile">Enregistrer</span>
 			</a>
-			<button mat-icon-button [matMenuTriggerFor]="menu" color="primary">
-				<mat-icon>more_vert</mat-icon>
-			</button>
-			<mat-menu #menu="matMenu">
-				<button mat-menu-item color="primary" (click)="onSumbit(true)">Save & Exit</button>
-				<button mat-menu-item color="primary">Save & Duplicate</button>
-				<button mat-menu-item color="primary" (click)="onSumbit(false)">Save & Continue</button>
-			</mat-menu>
 		</ng-container>
 	</kt-portlet-header>
 
@@ -28,7 +20,7 @@
 			<mat-tab>
 				<ng-template mat-tab-label>
 					<i class="mat-tab-label-icon fa fa-user"></i>
-					Basic info
+					Informations de base
 				</ng-template>
 				<ng-template matTabContent>
 					<!--begin::Form-->
@@ -36,29 +28,29 @@
 						<form [formGroup]="userForm" class="kt-form kt-form--group-seperator-dashed">
 
 							<kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000" (close)="onAlertClose($event)">
-								Oh snap! Change a few things up and try submitting again.
+								Oh ! Une erreur s'est produite, veuillez réessayer
 							</kt-alert>
 							<div class="kt-form__section kt-form__section--first">
 								<div class="form-group kt-form__group row">
 									<div class="col-lg-4 kt-margin-bottom-20-mobile">
 										<mat-form-field class="mat-form-field-fluid">
 											<input matInput placeholder="Enter Username" formControlName="username"/>
-											<mat-error>Username is
-												<strong>required</strong>
+											<mat-error>Nom d'utilisateur
+												<strong>obligatoire</strong>
 											</mat-error>
-											<mat-hint align="start">Please enter
-												<strong>Username</strong>
+											<mat-hint align="start">
+												<strong>Nom d'utilisateur</strong>
 											</mat-hint>
 										</mat-form-field>
 									</div>
 									<div class="col-lg-4 kt-margin-bottom-20-mobile">
 										<mat-form-field class="mat-form-field-fluid">
 											<input matInput placeholder="Enter Full Name" formControlName="fullname"/>
-											<mat-error>Full Name is
-												<strong>required</strong>
+											<mat-error>Nom Complet
+												<strong>obligatoire</strong>
 											</mat-error>
-											<mat-hint align="start">Please enter
-												<strong>Full Name</strong>
+											<mat-hint align="start">
+												<strong>Nom Complet</strong>
 											</mat-hint>
 										</mat-form-field>
 									</div>
@@ -66,10 +58,10 @@
 									<div class="col-lg-4 kt-margin-bottom-20-mobile">
 										<mat-form-field class="mat-form-field-fluid">
 											<input type="email" matInput placeholder="Enter Email" formControlName="email"/>
-											<mat-error>Email is
-												<strong>required</strong>
+											<mat-error>Email est
+												<strong>obligatoire</strong>
 											</mat-error>
-											<mat-hint align="start">Please enter
+											<mat-hint align="start">
 												<strong>Email</strong>
 											</mat-hint>
 										</mat-form-field>
@@ -79,7 +71,7 @@
 									<div class="col-lg-4 kt-margin-bottom-20-mobile">
 										<mat-form-field class="mat-form-field-fluid">
 											<input matInput placeholder="Enter Occupation" formControlName="occupation"/>
-											<mat-hint align="start">Please enter
+											<mat-hint align="start">
 												<strong>Occupation</strong>
 											</mat-hint>
 										</mat-form-field>
@@ -87,8 +79,8 @@
 									<div class="col-lg-4 kt-margin-bottom-20-mobile">
 										<mat-form-field class="mat-form-field-fluid">
 											<input matInput placeholder="Enter Company Name" formControlName="companyName"/>
-											<mat-hint align="start">Please enter
-												<strong>Company Name</strong>
+											<mat-hint align="start">
+												<strong>Société</strong>
 											</mat-hint>
 										</mat-form-field>
 									</div>
@@ -96,8 +88,8 @@
 									<div class="col-lg-4 kt-margin-bottom-20-mobile">
 										<mat-form-field class="mat-form-field-fluid">
 											<input matInput placeholder="Enter Phone" formControlName="phone"/>
-											<mat-hint align="start">Please enter
-												<strong>Phone</strong>
+											<mat-hint align="start">
+												<strong>Téléphone</strong>
 											</mat-hint>
 										</mat-form-field>
 									</div>
@@ -111,25 +103,16 @@
 			<mat-tab [disabled]="!user || !user.id">
 				<ng-template mat-tab-label>
 					<i class="mat-tab-label-icon fa fa-address-book"></i>
-					User address
+					Adresse Utilisateur
 				</ng-template>
 				<ng-template matTabContent>
 					<kt-address [(addressSubject)]="addressSubject"></kt-address>
 				</ng-template>
 			</mat-tab>
-			<mat-tab [disabled]="!user || !user.id">
-				<ng-template mat-tab-label>
-					<i class="mat-tab-label-icon fab fa-facebook"></i>
-					Social Nerworks
-				</ng-template>
-				<ng-template matTabContent>
-					<kt-social-networks [(socialNetworksSubject)]="soicialNetworksSubject"></kt-social-networks>
-				</ng-template>
-			</mat-tab>
 			<mat-tab *ngIf="user" [disabled]="!user || !user.id">
 				<ng-template mat-tab-label>
 					<i class="mat-tab-label-icon fa fa-unlock"></i>
-					User roles
+					Role Utilisateur
 				</ng-template>
 				<ng-template matTabContent>
 					<kt-user-roles-list [(rolesSubject)]="rolesSubject"></kt-user-roles-list>
@@ -138,7 +121,7 @@
 			<mat-tab *ngIf="user" [disabled]="!user || !user.id">
 				<ng-template mat-tab-label>
 					<i class="mat-tab-label-icon fa fa-exchange-alt"></i>
-					Change password
+					Changer de mot mot de passe
 				</ng-template>
 				<ng-template matTabContent>
 					<kt-change-password [userId]="user.id"></kt-change-password>

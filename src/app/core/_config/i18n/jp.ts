@@ -81,9 +81,9 @@ export const locale = {
 				NEW_CUSTOMER: 'New Customer',
 				DELETE_CUSTOMER_SIMPLE: {
 					TITLE: 'Customer Delete',
-					DESCRIPTION: 'Are you sure to permanently delete this customer?',
-					WAIT_DESCRIPTION: 'Customer is deleting...',
-					MESSAGE: 'Customer has been deleted'
+					DESCRIPTION: 'Etes vous sur de supprimer définitivement le client ?',
+					WAIT_DESCRIPTION: 'Suppression client en cours...',
+					MESSAGE: 'Client suppriméCustomer has been deleted'
 				},
 				DELETE_CUSTOMER_MULTY: {
 					TITLE: 'Customers Delete',

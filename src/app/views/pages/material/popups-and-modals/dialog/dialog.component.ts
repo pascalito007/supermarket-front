@@ -28,7 +28,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 							that supports Google's largest applications.</p>
 					</mat-dialog-content>
 					<mat-dialog-actions>
-						<button mat-button mat-dialog-close>Cancel</button>
+						<button mat-button mat-dialog-close>Annuler</button>
 						<button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
 					</mat-dialog-actions>
 				</div>

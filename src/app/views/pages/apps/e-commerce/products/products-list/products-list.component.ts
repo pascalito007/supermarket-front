@@ -192,10 +192,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
    * @param _item: ProductModel
    */
   deleteProduct(_item: ProductModel) {
-    const _title = 'Product Delete';
-    const _description = 'Are you sure to permanently delete this product?';
-    const _waitDesciption = 'Product is deleting...';
-    const _deleteMessage = `Product has been deleted`;
+    const _title = 'Supprimer Pruit';
+    const _description = 'Etes vous sur de supprimer le produit ?';
+    const _waitDesciption = 'Suppression en cours...';
+    const _deleteMessage = `Le Produit a été supprimé`;
 
     const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
     dialogRef.afterClosed().subscribe(res => {
@@ -212,10 +212,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
    * Delete products
    */
   deleteProducts() {
-    const _title = 'Products Delete';
-    const _description = 'Are you sure to permanently delete selected products?';
-    const _waitDesciption = 'Products are deleting...';
-    const _deleteMessage = 'Selected products have been deleted';
+    const _title = 'Suppression Produit';
+    const _description = 'Etes vous sur de supprimer les produits sélectionnés ?';
+    const _waitDesciption = 'Suppression en cours...';
+    const _deleteMessage = 'Produit(s) sélectionné(s) supprimé(s)';
 
     const dialogRef = this.layoutUtilsService.deleteElement(_title, _description, _waitDesciption);
     dialogRef.afterClosed().subscribe(res => {
