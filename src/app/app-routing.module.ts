@@ -20,24 +20,12 @@ const routes: Routes = [
         loadChildren: () => import('app/views/pages/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
-        path: 'mail',
-        loadChildren: () => import('app/views/pages/apps/mail/mail.module').then(m => m.MailModule)
-      },
-      {
         path: 'ecommerce',
         loadChildren: () => import('app/views/pages/apps/e-commerce/e-commerce.module').then(m => m.ECommerceModule),
       },
       {
-        path: 'ngbootstrap',
-        loadChildren: () => import('app/views/pages/ngbootstrap/ngbootstrap.module').then(m => m.NgbootstrapModule)
-      },
-      {
         path: 'user-management',
         loadChildren: () => import('app/views/pages/user-management/user-management.module').then(m => m.UserManagementModule)
-      },
-      {
-        path: 'builder',
-        loadChildren: () => import('app/views/theme/content/builder/builder.module').then(m => m.BuilderModule)
       },
       {
         path: 'error/403',
