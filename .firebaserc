@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "gostore-b24ab": {
+      "hosting": {
+        "metronic": [
+          "gostore-b24ab"
+        ]
+      }
+    }
+  }
+}

@@ -1,9 +1,9 @@
 // Angular
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 // RxJS
-import {Observable, Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import {finalize, takeUntil, tap} from 'rxjs/operators';
 // Translate
 import {TranslateService} from '@ngx-translate/core';
@@ -12,15 +12,12 @@ import {Store} from '@ngrx/store';
 import {AppState} from '../../../../core/reducers';
 // Auth
 import {AuthNoticeService, AuthService, Login} from '../../../../core/auth';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {v4 as uuid} from 'uuid';
 
 /**
  * ! Just example => Should be removed in development
  */
-const DEMO_PARAMS = {
-  EMAIL: 'admin@demo.com',
-  PASSWORD: 'demo'
-};
-
 @Component({
   selector: 'kt-login',
   templateUrl: './login.component.html',
@@ -46,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute, private afAuth: AngularFireAuth, private ngZone: NgZone
   ) {
     this.unsubscribe = new Subject();
   }
@@ -54,9 +51,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initLoginForm();
     // redirect back to the returnUrl before login
-    this.route.queryParams.subscribe(params => {
-      this.returnUrl = params.returnUrl || '/';
-    });
+    //this.route.queryParams.subscribe(params => {
+      //this.returnUrl = params.returnUrl || '/';
+    //});
   }
 
   /**
@@ -71,22 +68,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   initLoginForm() {
     // demo message to show
-    if (!this.authNoticeService.onNoticeChanged$.getValue()) {
-      const initialNotice = `Use account
-			<strong>${DEMO_PARAMS.EMAIL}</strong> and password
-			<strong>${DEMO_PARAMS.PASSWORD}</strong> to continue.`;
-      this.authNoticeService.setNotice(initialNotice, 'info');
-    }
 
     this.loginForm = this.fb.group({
-      email: [DEMO_PARAMS.EMAIL, Validators.compose([
+      email: ['', Validators.compose([
         Validators.required,
         Validators.email,
         Validators.minLength(3),
         Validators.maxLength(320) // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
       ])
       ],
-      password: [DEMO_PARAMS.PASSWORD, Validators.compose([
+      password: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(100)
@@ -98,7 +89,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   /**
    * Form Submit
    */
-  submit() {
+  async submit() {
     const controls = this.loginForm.controls;
     /** check form */
     if (this.loginForm.invalid) {
@@ -114,24 +105,19 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: controls.email.value,
       password: controls.password.value
     };
-    this.auth
-      .login(authData.email, authData.password)
-      .pipe(
-        tap(user => {
-          if (user) {
-            this.store.dispatch(new Login({authToken: user.accessToken}));
-            this.router.navigateByUrl(this.returnUrl); // Main page
-          } else {
-            this.authNoticeService.setNotice(this.translate.instant('AUTH.VALIDATION.INVALID_LOGIN'), 'danger');
-          }
-        }),
-        takeUntil(this.unsubscribe),
-        finalize(() => {
-          this.loading = false;
-          this.cdr.markForCheck();
-        })
-      )
-      .subscribe();
+
+    try {
+      const response = await this.afAuth.auth.signInWithEmailAndPassword(authData.email, authData.password);
+      console.log(response);
+      this.router.navigate(['/dashboard']); // Main page
+      this.loading = false;
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.log(error);
+      this.authNoticeService.setNotice(this.translate.instant('AUTH.VALIDATION.INVALID_LOGIN'), 'danger');
+      this.loading = false;
+      this.cdr.markForCheck();
+    }
   }
 
 

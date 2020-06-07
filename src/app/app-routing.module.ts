@@ -5,18 +5,20 @@ import {RouterModule, Routes} from '@angular/router';
 import {BaseComponent} from './views/theme/base/base.component';
 import {ErrorPageComponent} from './views/theme/content/error-page/error-page.component';
 // Auth
-import {AuthGuard} from './core/auth';
+import {AngularFireAuthGuard, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
 
+const redirectUnAuthorizedToLogin = () => redirectUnauthorizedTo(['/auth/login']);
 const routes: Routes = [
   {path: 'auth', loadChildren: () => import('app/views/pages/auth/auth.module').then(m => m.AuthModule)},
 
   {
     path: '',
     component: BaseComponent,
-    canActivate: [AuthGuard],
     children: [
       {
         path: 'dashboard',
+        canActivate: [AngularFireAuthGuard],
+        data: {authGuardPipe: redirectUnAuthorizedToLogin},
         loadChildren: () => import('app/views/pages/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {

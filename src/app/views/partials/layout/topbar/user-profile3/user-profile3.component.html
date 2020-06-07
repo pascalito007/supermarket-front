@@ -1,8 +1,8 @@
-<div ngbDropdown placement="bottom-right" *ngIf="user$ | async as _user" class="kt-header__topbar-item kt-header__topbar-item--user">
+<div ngbDropdown placement="bottom-right" *ngIf="afAuth.user | async as _user" class="kt-header__topbar-item kt-header__topbar-item--user">
 	<div ngbDropdownToggle class="kt-header__topbar-wrapper">
 		<span class="kt-header__topbar-welcome">Salut,</span>
-		<span class="kt-header__topbar-username">{{_user.fullname}}</span>
-		<span class="kt-header__topbar-icon"><b>{{_user.fullname|firstLetter}}</b></span>
+		<span class="kt-header__topbar-username">{{_user.displayName}}</span>
+		<span class="kt-header__topbar-icon"><b>{{_user.email|firstLetter}}</b></span>
 	</div>
 	<div ngbDropdownMenu class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl">
 		<!--begin: Navigation -->
@@ -22,6 +22,3 @@
 		<!--end: Navigation(alternative) -->
 	</div>
 </div>
-
-
-<!-- <a (click)="logout()" class="btn btn-label-brand btn-sm btn-bold">Sign Out</a> -->

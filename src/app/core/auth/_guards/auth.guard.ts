@@ -9,10 +9,11 @@ import { select, Store } from '@ngrx/store';
 // Auth reducers and selectors
 import { AppState} from '../../../core/reducers/';
 import { isLoggedIn } from '../_selectors/auth.selectors';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private store: Store<AppState>, private router: Router) { }
+    constructor(private store: Store<AppState>, private router: Router, private afAuth: AngularFireAuth) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>  {
         return this.store
