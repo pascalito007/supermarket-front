@@ -12,14 +12,25 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+Or Run `npm run build:prod` to build the project in production. The build artifacts will be stored in the `dist/` directory.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Host the application
 
-## Running end-to-end tests
+1. Run `firbase init` to initialise hosting service (follow steps)
+2. Run `firebase deploy --only hosting` to deploy and publish the app in firebase hosting
+3. Visite the url of the backend web app https://gostore-b24ab.web.app
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Some app screens
+#### Login screen
 
-## Further help
+<img src="https://live.staticflickr.com/65535/50000802841_ab35220559_z.jpg" width="400">
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Main screen
+
+<img src="https://live.staticflickr.com/65535/50001059537_7b1243964f_z.jpg" width="400">
+
+### Products list
+<img src="https://live.staticflickr.com/65535/50001059497_8b2cb92293_z.jpg" width="400">
+
+### Orders list
+<img src="https://live.staticflickr.com/65535/50001059447_d45af1444a_z.jpg" width="400">
