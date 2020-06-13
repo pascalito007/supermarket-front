@@ -16,9 +16,6 @@ import {PartialsModule} from '../../../partials/partials.module';
 import {ModuleGuard} from '../../../../core/auth';
 // Core => Services
 import {
-  customersReducer,
-  CustomerEffects,
-  CustomersService,
   productsReducer,
   ProductEffects,
   ProductsService,
@@ -39,15 +36,11 @@ import {
 } from '../../../partials/content/crud';
 // Components
 import {ECommerceComponent} from './e-commerce.component';
-// Customers
-import {CustomersListComponent} from './customers/customers-list/customers-list.component';
-import {CustomerEditDialogComponent} from './customers/customer-edit/customer-edit.dialog.component';
 // Products
 import {ProductsListComponent} from './products/products-list/products-list.component';
 import {ProductEditComponent} from './products/product-edit/product-edit.component';
 // Orders
 import {OrdersListComponent} from './orders/orders-list/orders-list.component';
-import {OrderEditComponent} from './orders/order-edit/order-edit.component';
 // Material
 import {
   MatInputModule,
@@ -86,7 +79,6 @@ const routes: Routes = [
     // data: { moduleName: 'ecommerce' },
     children: [
       {path: '', redirectTo: 'customers', pathMatch: 'full'},
-      {path: 'customers', component: CustomersListComponent},
       {path: 'orders', component: OrdersListComponent},
       {path: 'products', component: ProductsListComponent},
       {path: 'products/add', component: ProductEditComponent},
@@ -129,8 +121,6 @@ const routes: Routes = [
     NgbProgressbarModule,
     StoreModule.forFeature('products', productsReducer),
     EffectsModule.forFeature([ProductEffects]),
-    StoreModule.forFeature('customers', customersReducer),
-    EffectsModule.forFeature([CustomerEffects]),
   ],
   providers: [
     ModuleGuard,
@@ -152,26 +142,20 @@ const routes: Routes = [
     TypesUtilsService,
     LayoutUtilsService,
     HttpUtilsService,
-    CustomersService,
     ProductsService,
     TypesUtilsService,
     LayoutUtilsService
   ],
   entryComponents: [
     ActionNotificationComponent,
-    CustomerEditDialogComponent,
     DeleteEntityDialogComponent,
     FetchEntityDialogComponent,
     UpdateStatusDialogComponent,
   ],
   declarations: [
     ECommerceComponent,
-    // Customers
-    CustomersListComponent,
-    CustomerEditDialogComponent,
     // Orders
     OrdersListComponent,
-    OrderEditComponent,
     // Products
     ProductsListComponent,
     ProductEditComponent,

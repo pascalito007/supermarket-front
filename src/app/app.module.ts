@@ -61,6 +61,7 @@ import * as json from 'highlight.js/lib/languages/json';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFireAuthGuard} from '@angular/fire/auth-guard';
+import {AngularFireDatabaseModule} from '@angular/fire/database';
 
 // tslint:disable-next-line:class-name
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -96,6 +97,7 @@ export function hljsLanguages(): HighlightLanguage[] {
     AppRoutingModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
     AngularFireAuthModule,
     NgxPermissionsModule.forRoot(),
     PartialsModule,

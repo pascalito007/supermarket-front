@@ -114,27 +114,12 @@
           <mat-cell *matCellDef="let product">€{{product.price}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="number_of_reviews">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Nb avis</mat-header-cell>
-          <mat-cell *matCellDef="let product">{{product.number_of_reviews}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="number_of_answered_questions">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Nb réponses</mat-header-cell>
-          <mat-cell *matCellDef="let product">{{product.number_of_answered_questions}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="average_review_rating">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>Note moyenne</mat-header-cell>
-          <mat-cell *matCellDef="let product">{{product.average_review_rating}}</mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef>
             Actions
           </mat-header-cell>
           <mat-cell *matCellDef="let product">
-            <button type="button" (click)="editProduct(product.id)" mat-icon-button color="primary"
+            <button type="button" (click)="editProduct(product.key)" mat-icon-button color="primary"
                     matTooltip="Edit product">
               <mat-icon>create</mat-icon>
             </button>&nbsp;
@@ -149,13 +134,12 @@
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </mat-table>
       <div class="mat-table__message" *ngIf="!dataSource.hasItems">Aucun enregistrement trouvé</div>
-      <div class="mat-table__message" *ngIf="dataSource.isPreloadTextViewed$ | async">Patientez svp....</div>
+      <div class="mat-table__message" *ngIf="(dataSource.totalSize | async) === 0">Patientez svp....</div>
     </div>
 
     <!-- start: BOTTOM -->
     <div class="mat-table__bottom">
-      <mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
-      <mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="dataSource.paginatorTotal$ | async"
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="dataSource.totalSize | async"
                      [showFirstLastButtons]="true"></mat-paginator>
     </div>
     <!-- end: BOTTOM -->

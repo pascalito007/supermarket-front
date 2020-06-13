@@ -1,32 +1,26 @@
 // RxJS
-import { of } from 'rxjs';
-import { catchError, finalize, tap, debounceTime, delay, distinctUntilChanged } from 'rxjs/operators';
+import {of} from 'rxjs';
+import {catchError, finalize, tap, debounceTime, delay, distinctUntilChanged} from 'rxjs/operators';
 // NGRX
-import { Store, select } from '@ngrx/store';
+import {Store} from '@ngrx/store';
 // CRUD
-import { BaseDataSource, QueryResultsModel } from '../../_base/crud';
+import {BaseDataSource} from '../../_base/crud';
 // State
-import { AppState } from '../../../core/reducers';
-import { selectUsersInStore, selectUsersPageLoading, selectUsersShowInitWaitingMessage } from '../_selectors/user.selectors';
+import {AppState} from '../../../core/reducers';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFireDatabase} from '@angular/fire/database';
 
 
 export class UsersDataSource extends BaseDataSource {
-	constructor(private store: Store<AppState>) {
-		super();
+  constructor(private store: Store<AppState>, private db: AngularFireDatabase) {
+    super();
+  }
 
-		this.loading$ = this.store.pipe(
-			select(selectUsersPageLoading)
-		);
+  connect() {
+    return this.db.list('users').valueChanges();
+  }
 
-		this.isPreloadTextViewed$ = this.store.pipe(
-			select(selectUsersShowInitWaitingMessage)
-		);
 
-		this.store.pipe(
-			select(selectUsersInStore)
-		).subscribe((response: QueryResultsModel) => {
-			this.paginatorTotalSubject.next(response.totalCount);
-			this.entitySubject.next(response.items);
-		});
-	}
+  disconnect(): void {
+  }
 }

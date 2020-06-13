@@ -10,6 +10,7 @@ import {HttpUtilsService, QueryParamsModel, QueryResultsModel} from '../../_base
 import {ProductModel} from '../_models/product.model';
 import {each} from 'lodash';
 import {v4 as uuid} from 'uuid';
+import {AngularFireDatabase} from '@angular/fire/database';
 
 const API_PRODUCTS_URL = 'api/products';
 const PRODUCTS_URL = 'http://localhost:8080/products';
@@ -20,7 +21,7 @@ export class ProductsService {
   lastFilter$: BehaviorSubject<QueryParamsModel> = new BehaviorSubject(new QueryParamsModel({}, 'asc', '', 0, 10));
 
   constructor(private http: HttpClient,
-              private httpUtils: HttpUtilsService) {
+              private httpUtils: HttpUtilsService, private db: AngularFireDatabase) {
   }
 
   // CREATE =>  POST: add a new product to the server
@@ -31,8 +32,7 @@ export class ProductsService {
 
   // READ
   getAllProducts(): Observable<ProductModel[]> {
-    return this.http.get<any>(PRODUCTS_URL).pipe(map(response => {
-      const products = response._embedded.products;
+    return this.db.list('/products').valueChanges().pipe(map(products => {
       return products.map((product: ProductModel) => {
         product.id = uuid();
         product.uniq_id = product.uniq_id.substring(0, 8);

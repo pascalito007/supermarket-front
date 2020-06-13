@@ -1,13 +1,12 @@
-import {AfterViewInit, AfterViewChecked} from '@angular/core';
 // Angular
 import {Component, OnInit, ElementRef, ViewChild, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 // Material
 import {SelectionModel} from '@angular/cdk/collections';
-import {MatPaginator, MatSort, MatSnackBar} from '@angular/material';
+import {MatPaginator, MatSort} from '@angular/material';
 // RXJS
 import {debounceTime, distinctUntilChanged, tap, skip, take, delay} from 'rxjs/operators';
-import {fromEvent, merge, Observable, of, Subscription} from 'rxjs';
+import {fromEvent, merge, of, Subscription} from 'rxjs';
 // LODASH
 import {each, find} from 'lodash';
 // NGRX
@@ -23,10 +22,10 @@ import {
   UsersDataSource,
   UserDeleted,
   UsersPageRequested,
-  selectUserById,
   selectAllRoles, AuthService
 } from '../../../../../core/auth';
 import {SubheaderService} from '../../../../../core/_base/layout';
+import {AngularFireDatabase} from '@angular/fire/database';
 
 @Component({
   selector: 'kt-users-list',
@@ -57,7 +56,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     private router: Router,
     private layoutUtilsService: LayoutUtilsService,
     private subheaderService: SubheaderService, private userService: AuthService,
-    private cdr: ChangeDetectorRef) {
+    private cdr: ChangeDetectorRef, private db: AngularFireDatabase) {
   }
 
 
@@ -97,14 +96,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(searchSubscription);
 
     // Set title to page breadCrumbs
-    this.subheaderService.setTitle('User management');
+    this.subheaderService.setTitle('Gestion des utilisateurs');
 
     // Init DataSource
-    this.dataSource = new UsersDataSource(this.store);
+    this.dataSource = new UsersDataSource(this.store, this.db);
     const entitiesSubscription = this.dataSource.entitySubject.pipe(
       skip(1),
       distinctUntilChanged()
     ).subscribe(res => {
+      console.log(res);
       this.usersResult = res;
     });
     this.subscriptions.push(entitiesSubscription);

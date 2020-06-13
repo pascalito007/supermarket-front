@@ -24,6 +24,7 @@ import {
   selectUsersActionLoading
 } from '../../../../../core/auth';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Component({
   selector: 'kt-user-edit',
@@ -62,7 +63,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
               private layoutUtilsService: LayoutUtilsService,
               private store: Store<AppState>,
               private layoutConfigService: LayoutConfigService,
-              private afAuth: AngularFireAuth) {
+              private afAuth: AngularFireAuth, private afs: AngularFirestore) {
   }
 
   /**
@@ -82,8 +83,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
           if (res) {
             this.user = res;
             this.rolesSubject.next(this.user.roles);
-            this.addressSubject.next(this.user.address);
-            this.soicialNetworksSubject.next(this.user.socialNetworks);
+            //this.addressSubject.next(this.user.address);
+            //this.soicialNetworksSubject.next(this.user.socialNetworks);
             this.oldUser = Object.assign({}, this.user);
             this.initUser();
           }
@@ -92,8 +93,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
         this.user = new User();
         this.user.clear();
         this.rolesSubject.next(this.user.roles);
-        this.addressSubject.next(this.user.address);
-        this.soicialNetworksSubject.next(this.user.socialNetworks);
+        //this.addressSubject.next(this.user.address);
+        //this.soicialNetworksSubject.next(this.user.socialNetworks);
         this.oldUser = Object.assign({}, this.user);
         this.initUser();
       }
@@ -113,17 +114,17 @@ export class UserEditComponent implements OnInit, OnDestroy {
     if (!this.user.id) {
       this.subheaderService.setTitle('Create user');
       this.subheaderService.setBreadcrumbs([
-        {title: 'User Management', page: `user-management`},
-        {title: 'Users', page: `user-management/users`},
-        {title: 'Create user', page: `user-management/users/add`}
+        {title: 'Gestion des utilisateurs', page: `user-management`},
+        {title: 'Utilisateurs', page: `user-management/users`},
+        {title: 'Créer un utilisateur', page: `user-management/users/add`}
       ]);
       return;
     }
     this.subheaderService.setTitle('Edit user');
     this.subheaderService.setBreadcrumbs([
-      {title: 'User Management', page: `user-management`},
-      {title: 'Users', page: `user-management/users`},
-      {title: 'Edit user', page: `user-management/users/edit`, queryParams: {id: this.user.id}}
+      {title: 'Gestion des utilisateurs', page: `user-management`},
+      {title: 'Utilisateurs', page: `user-management/users`},
+      {title: 'Modifier un utilisateur', page: `user-management/users/edit`, queryParams: {id: this.user.id}}
     ]);
   }
 
@@ -216,12 +217,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
     const _user = new User();
     _user.clear();
     _user.roles = this.rolesSubject.value;
-    _user.address = this.addressSubject.value;
-    _user.socialNetworks = this.soicialNetworksSubject.value;
     _user.accessToken = this.user.accessToken;
     _user.refreshToken = this.user.refreshToken;
     _user.pic = this.user.pic;
-    _user.id = this.user.id;
     _user.username = controls.username.value;
     _user.email = controls.email.value;
     _user.fullname = controls.fullname.value;
@@ -242,6 +240,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
     const response = await this.afAuth.auth.createUserWithEmailAndPassword(_user.email, '123456');
     await response.user.updateProfile({displayName: _user.fullname});
     this.store.dispatch(new UserOnServerCreated({user: _user}));
+    const user = await this.afAuth.auth.currentUser;
+    await this.afs.doc('users/' + this.afs.createId()).set(Object.assign({}, _user));
     const addSubscription = this.store.pipe(select(selectLastCreatedUserId)).subscribe(newId => {
       const message = `New user successfully has been added.`;
       this.layoutUtilsService.showActionNotification(message, MessageType.Create, 5000, true, true);

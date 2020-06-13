@@ -1,9 +1,9 @@
 <kt-portlet>
 	<!-- PORTLET LOADING | Binded to TABLE Datasource -->
 	<!-- See prop => '~/core/_crud/models/data-sources/_base.datasource.ts' (loading$) -->
-	<kt-portlet-header [title]="'Users list'" [class]="'kt-portlet__head--lg'" [viewLoading$]="dataSource.loading$">
+	<kt-portlet-header [title]="'Liste de utilisateurs'" [class]="'kt-portlet__head--lg'" [viewLoading$]="!dataSource">
 		<ng-container ktPortletTools>
-			<button [routerLink]="['../users/add']" mat-raised-button color="primary" matTooltip="Create new User">New user</button>
+			<button [routerLink]="['../users/add']" mat-raised-button color="primary" matTooltip="Create new User">Nouvel utilisateur</button>
 			<!-- Buttons (Material Angular) | See off.documenations 'https://material.angular.io/components/button/overview' -->
 			<!-- mat-raised-button | Rectangular contained button w/ elevation  -->
 		</ng-container>
@@ -21,7 +21,7 @@
 						<mat-form-field class="mat-form-field-fluid">
 							<input matInput placeholder="Search user" #searchInput placeholder="Search">
 							<mat-hint align="start">
-								<strong>Search</strong> in all fields
+								<strong>Rechercher</strong> dans tous les champs
 							</mat-hint>
 						</mat-form-field>
 					</div>
@@ -47,7 +47,7 @@
 						<div class="kt-form__control kt-form__group--inline">
 							<button (click)="fetchUsers()" mat-raised-button matTooltip="Fetch selected users"  class="mat-button-mt-4">
 								<mat-icon>clear_all</mat-icon>
-								Fetch Selected
+								Utilisateurs retrouvés
 							</button>
 						</div>
 					</div>
@@ -92,7 +92,7 @@
 				</ng-container>
 
 				<ng-container matColumnDef="username">
-					<mat-header-cell *matHeaderCellDef mat-sort-header>Username</mat-header-cell>
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Nom d'utilisateur</mat-header-cell>
 					<mat-cell *matCellDef="let user">{{user.username}}</mat-cell>
 				</ng-container>
 
@@ -104,7 +104,7 @@
 				</ng-container>
 
 				<ng-container matColumnDef="fullname">
-					<mat-header-cell *matHeaderCellDef mat-sort-header>Full name</mat-header-cell>
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Nom complet</mat-header-cell>
 					<mat-cell *matCellDef="let user">{{user.fullname}}</mat-cell>
 				</ng-container>
 
@@ -118,10 +118,10 @@
 				<ng-container matColumnDef="actions">
 					<mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
 					<mat-cell *matCellDef="let user">
-						<button (click)="editUser(user.id)" mat-icon-button color="primary" matTooltip="Edit user">
+						<button (click)="editUser(user.id)" mat-icon-button color="primary" matTooltip="Modifier">
 							<mat-icon>create</mat-icon>
 						</button>&nbsp;
-						<button mat-icon-button color="warn" matTooltip="Delete user" type="button" (click)="deleteUser(user)">
+						<button mat-icon-button color="warn" matTooltip="Supprimer" type="button" (click)="deleteUser(user)">
 							<mat-icon>delete</mat-icon>
 						</button>
 					</mat-cell>
@@ -131,17 +131,11 @@
 
 				<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 			</mat-table>
-			<div class="mat-table__message" *ngIf="!dataSource.hasItems">No records found</div><!-- Message for empty data  -->
-			<div class="mat-table__message" *ngIf="dataSource.isPreloadTextViewed$ | async">Please wait....</div>
+			<div class="mat-table__message" *ngIf="!dataSource">Aucun enregistrement trouvé</div><!-- Message for empty data  -->
 		</div>
 
 		<!-- start: BOTTOM -->
 		<div class="mat-table__bottom">
-			<!-- MATERIAL SPINNER | Url: 'https://material.angular.io/components/progress-spinner/overview' -->
-			<mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
-			<!-- MATERIAL PAGINATOR | Binded to dasources -->
-			<!-- See off.documentations 'https://material.angular.io/components/paginator/overview' -->
-			<mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="dataSource.paginatorTotal$ | async" [showFirstLastButtons]="true"></mat-paginator>
 		</div>
 		<!-- end: BOTTOM -->
 	</kt-portlet-body>

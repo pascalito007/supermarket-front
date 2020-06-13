@@ -3,13 +3,11 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatPaginator, MatSort} from '@angular/material';
 // RXJS
-import {tap} from 'rxjs/operators';
-import {merge} from 'rxjs';
-// Crud
 import {QueryParamsModel} from '../../../../../../core/_base/crud';
 // Layout
-import {DataTableItemModel, DataTableService} from '../../../../../../core/_base/layout';
+import {DataTableItemModel} from '../../../../../../core/_base/layout';
 import {DataTableDataSource} from './data-table.data-source';
+import {AngularFireDatabase} from '@angular/fire/database';
 
 @Component({
   selector: 'kt-data-table',
@@ -19,19 +17,19 @@ import {DataTableDataSource} from './data-table.data-source';
 export class DataTableComponent implements OnInit {
   // Public properties
   dataSource: DataTableDataSource;
-  displayedColumns = ['uniq_id', 'product_name', 'manufacturer', 'number_available_in_stock', 'number_of_reviews', 'price'];
+  displayedColumns = ['uniq_id', 'product_name', 'manufacturer', 'number_available_in_stock', 'price'];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   selection = new SelectionModel<DataTableItemModel>(true, []);
 
 
-  constructor(private dataTableService: DataTableService) {
+  constructor(private db: AngularFireDatabase) {
   }
 
 
   ngOnInit() {
     // Init DataSource
-    this.dataSource = new DataTableDataSource(this.dataTableService);
+    this.dataSource = new DataTableDataSource(this.db);
     // First load
     this.loadItems(true);
   }
@@ -49,7 +47,6 @@ export class DataTableComponent implements OnInit {
       this.paginator && this.paginator.pageIndex,
       firstLoad ? 6 : this.paginator.pageSize
     );
-    this.dataSource.loadItems(queryParams);
     this.selection.clear();
   }
 

@@ -2,38 +2,21 @@
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 // RxJS
 import {Observable, BehaviorSubject, of} from 'rxjs';
-import {catchError, finalize, tap} from 'rxjs/operators';
+import {catchError, finalize, map, tap} from 'rxjs/operators';
 // CRUD
-import {QueryParamsModel, QueryResultsModel, HttpExtenstionsModel} from '../../../../../../core/_base/crud';
+import {QueryParamsModel, QueryResultsModel, HttpExtenstionsModel, BaseDataSource} from '../../../../../../core/_base/crud';
 import {DataTableService, DataTableItemModel} from '../../../../../../core/_base/layout';
+import {AngularFireDatabase} from '@angular/fire/database';
 
-// Why not use MatTableDataSource?
-/*  In this example, we will not be using the built-in MatTableDataSource because its designed for filtering,
-	sorting and pagination of a client - side data array.
-	Read the article: 'https://blog.angular-university.io/angular-material-data-table/'
-**/
-export class DataTableDataSource implements DataSource<DataTableItemModel> {
-  // Public properties
-  entitySubject = new BehaviorSubject<any[]>([]);
-  hasItems = false; // Need to show message: 'No records found
-
-  // Loading | Progress bar
-  loadingSubject = new BehaviorSubject<boolean>(false);
-  loading$: Observable<boolean>;
-
-  // Paginator | Paginators count
-  paginatorTotalSubject = new BehaviorSubject<number>(0);
-  paginatorTotal$: Observable<number>;
+export class DataTableDataSource extends BaseDataSource {
 
   /**
    * Data-Source Constructor
    *
    * @param dataTableService: DataTableService
    */
-  constructor(private dataTableService: DataTableService) {
-    this.loading$ = this.loadingSubject.asObservable();
-    this.paginatorTotal$ = this.paginatorTotalSubject.asObservable();
-    this.paginatorTotal$.subscribe(res => this.hasItems = res > 0);
+  constructor(private db: AngularFireDatabase) {
+    super();
   }
 
   /**
@@ -42,8 +25,24 @@ export class DataTableDataSource implements DataSource<DataTableItemModel> {
    * @param collectionViewer: CollectionViewer
    */
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
-    // Connecting data source
-    return this.entitySubject.asObservable();
+    const items: Observable<any[]> = this.db.list('products')
+      .snapshotChanges().pipe(
+        map(changes =>
+            changes.map((c: any) => {
+              const product = c.payload.val();
+              if (product.uniq_id) {
+                product.uniq_id = product.uniq_id.substring(0, 8);
+              }
+              if (product.product_name) {
+                product.product_name = product.product_name.substring(0, 20);
+              }
+              return ({key: c.payload.key, ...product});
+            }),
+          map((response: any) => {
+            return response.slice(response, 0, 5);
+          })
+        ));
+    return items;
   }
 
   /**
@@ -51,52 +50,7 @@ export class DataTableDataSource implements DataSource<DataTableItemModel> {
    *
    * @param collectionViewer: CollectionViewer
    */
-  disconnect(collectionViewer: CollectionViewer): void {
-    // Disonnecting data source
-    this.entitySubject.complete();
-    this.loadingSubject.complete();
-    this.paginatorTotalSubject.complete();
+  disconnect(): void {
   }
 
-  baseFilter(_entities: any[], _queryParams: QueryParamsModel): QueryResultsModel {
-    let entitiesResult = _entities;
-
-    // Sorting
-    // start
-    if (_queryParams.sortField) {
-      entitiesResult = this.sortArray(_entities, _queryParams.sortField, _queryParams.sortOrder);
-    }
-    // end
-
-    // Paginator
-    // start
-    const totalCount = entitiesResult.length;
-    const initialPos = _queryParams.pageNumber * _queryParams.pageSize;
-    entitiesResult = entitiesResult.slice(initialPos, initialPos + _queryParams.pageSize);
-    // end
-
-    const queryResults = new QueryResultsModel();
-    queryResults.items = entitiesResult;
-    queryResults.totalCount = totalCount;
-    return queryResults;
-  }
-
-  loadItems(queryParams: QueryParamsModel) {
-    this.loadingSubject.next(true);
-    this.dataTableService.getAllItems().pipe(
-      tap(res => {
-        const result = this.baseFilter(res, queryParams);
-        this.entitySubject.next(result.items);
-        this.paginatorTotalSubject.next(result.totalCount);
-
-      }),
-      catchError(err => of(new QueryResultsModel([], err))),
-      finalize(() => this.loadingSubject.next(false))
-    ).subscribe();
-  }
-
-  sortArray(_incomingArray: any[], _sortField: string = '', _sortOrder: string = 'asc'): any[] {
-    const httpExtenstion = new HttpExtenstionsModel();
-    return httpExtenstion.sortArray(_incomingArray, _sortField, _sortOrder);
-  }
 }

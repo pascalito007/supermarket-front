@@ -24,6 +24,9 @@ import {
   ProductsStatusUpdated,
   selectProductsPageLastQuery
 } from '../../../../../../core/e-commerce';
+import {AngularFireDatabase} from '@angular/fire/database';
+import {FirebaseListObservable} from '@angular/fire/database-deprecated';
+import {v4 as uuid} from 'uuid';
 
 
 @Component({
@@ -35,8 +38,7 @@ import {
 export class ProductsListComponent implements OnInit, OnDestroy {
   // Table fields
   dataSource: ProductsDataSource;
-  displayedColumns = ['select', 'uniq_id', 'product_name', 'manufacturer', 'number_available_in_stock', 'price', 'number_of_reviews',
-    'number_of_answered_questions', 'average_review_rating', 'actions'];
+  displayedColumns = ['select', 'uniq_id', 'product_name', 'manufacturer', 'number_available_in_stock', 'price', 'actions'];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild('sort1', {static: true}) sort: MatSort;
   // Filter fields
@@ -55,7 +57,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
               private router: Router,
               private subheaderService: SubheaderService,
               private layoutUtilsService: LayoutUtilsService,
-              private store: Store<AppState>) {
+              private store: Store<AppState>, private db: AngularFireDatabase) {
   }
 
 
@@ -87,7 +89,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.subheaderService.setTitle('Produits');
 
     // Init DataSource
-    this.dataSource = new ProductsDataSource(this.store);
+    this.dataSource = new ProductsDataSource(this.db);
     const entitiesSubscription = this.dataSource.entitySubject.pipe(
       skip(1),
       distinctUntilChanged()
@@ -148,15 +150,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       filter.status = +this.filterStatus;
     }
 
-    if (this.filterCondition && this.filterCondition.length > 0) {
-      filter.condition = +this.filterCondition;
-    }
-
-    filter.model = searchText;
-
     filter.manufacture = searchText;
-    filter.color = searchText;
-    filter.VINCode = searchText;
+    filter.product_name = searchText;
     return filter;
   }
 
@@ -179,10 +174,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     if ('status' in queryParams.filter) {
       this.filterStatus = queryParams.filter.status.toString();
     }
-
-    if (queryParams.filter.model) {
-      this.searchInput.nativeElement.value = queryParams.filter.model;
-    }
   }
 
   /** ACTIONS */
@@ -191,7 +182,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
    *
    * @param _item: ProductModel
    */
-  deleteProduct(_item: ProductModel) {
+  deleteProduct(_item: any) {
     const _title = 'Supprimer Pruit';
     const _description = 'Etes vous sur de supprimer le produit ?';
     const _waitDesciption = 'Suppression en cours...';
@@ -204,6 +195,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       }
 
       this.store.dispatch(new OneProductDeleted({id: _item.id}));
+      this.db.object('products/' + _item.key).remove();
       this.layoutUtilsService.showActionNotification(_deleteMessage, MessageType.Delete);
     });
   }
@@ -242,8 +234,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     let messages = [];
     this.selection.selected.forEach(elem => {
       messages.push({
-        text: `${elem.manufacture} ${elem.model} ${elem.modelYear}`,
-        id: elem.VINCode,
+        text: `${elem.manufacture}`,
         status: elem.status
       });
     });
@@ -261,8 +252,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
     this.selection.selected.forEach(elem => {
       _messages.push({
-        text: `${elem.manufacture} ${elem.model} ${elem.modelYear}`,
-        id: elem.VINCode,
+        text: `${elem.manufacture}`,
         status: elem.status,
         statusTitle: this.getItemStatusString(elem.status),
         statusCssClass: this.getItemCssClassByStatus(elem.status)

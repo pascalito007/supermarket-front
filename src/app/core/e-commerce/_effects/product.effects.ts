@@ -2,7 +2,7 @@ import { forkJoin } from 'rxjs';
 // Angular
 import { Injectable } from '@angular/core';
 // RxJS
-import { mergeMap, map, tap } from 'rxjs/operators';
+import {mergeMap, map, tap, concatMap} from 'rxjs/operators';
 // NGRX
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Store, Action } from '@ngrx/store';

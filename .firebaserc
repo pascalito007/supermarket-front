@@ -2,10 +2,13 @@
   "targets": {
     "gostore-b24ab": {
       "hosting": {
-        "metronic": [
+        "gostore": [
           "gostore-b24ab"
         ]
       }
     }
+  },
+  "projects": {
+    "default": "gostore-b24ab"
   }
 }

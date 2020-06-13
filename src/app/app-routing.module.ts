@@ -6,6 +6,7 @@ import {BaseComponent} from './views/theme/base/base.component';
 import {ErrorPageComponent} from './views/theme/content/error-page/error-page.component';
 // Auth
 import {AngularFireAuthGuard, redirectUnauthorizedTo} from '@angular/fire/auth-guard';
+import {OrdersListComponent} from './views/pages/apps/e-commerce/orders/orders-list/orders-list.component';
 
 const redirectUnAuthorizedToLogin = () => redirectUnauthorizedTo(['/auth/login']);
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: 'user-management',
         loadChildren: () => import('app/views/pages/user-management/user-management.module').then(m => m.UserManagementModule)
+      },
+      {
+        path: 'orders',
+        component: OrdersListComponent
       },
       {
         path: 'error/403',

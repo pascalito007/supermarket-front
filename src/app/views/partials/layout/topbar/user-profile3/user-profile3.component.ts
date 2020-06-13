@@ -22,27 +22,14 @@ export class UserProfile3Component implements OnInit {
   @Input() badge: boolean;
   @Input() icon: boolean;
 
-  /**
-   * Component constructor
-   *
-   * @param store: Store<AppState>
-   */
-  constructor(private store: Store<AppState>, private afAuth: AngularFireAuth) {
+
+  constructor(private store: Store<AppState>, public afAuth: AngularFireAuth) {
   }
 
-  /**
-   * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
-   */
 
-  /**
-   * On init
-   */
   ngOnInit(): void {
   }
 
-  /**
-   * Log out
-   */
   logout() {
     this.afAuth.auth.signOut();
     this.store.dispatch(new Logout());

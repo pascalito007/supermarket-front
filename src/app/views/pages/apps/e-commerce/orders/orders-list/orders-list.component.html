@@ -1,3 +1,107 @@
-<p>
-	<b>Orders:</b> - Coming soon in the following update.
-</p>
+<kt-portlet>
+
+  <kt-portlet-body>
+    <!-- start::FILTERS & GROUP ACTIONS -->
+    <div class="kt-form kt-margin-b-30">
+      <!-- start::FILTERS -->
+      <div class="kt-form__filtration">
+        <div class="row align-items-center">
+          <div class="col-md-6 kt-margin-bottom-10-mobile">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Recherche de produits" #searchInput placeholder="Rechercher"
+                     class="mat-form-field mat-form-field-fluid">
+              <mat-hint align="start">
+                <strong>Recherche globale</strong>
+              </mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <!-- end::FILTERS -->
+    </div>
+    <!-- end::FILTERS & GROUP ACTIONS -->
+
+    <!-- MATERIAL TABLE | Binded to datasources -->
+    <!-- See off.documentations 'https://material.angular.io/components/table/overview' -->
+    <div class="mat-table__wrapper">
+      <!-- Checkbox Column -->
+      <!-- Table with selection -->
+      <!-- https://run.stackblitz.com/api/angular/v1?file=app%2Ftable-selection-example.ts -->
+      <mat-table class="lmat-elevation-z8"
+                 #table
+                 [dataSource]="dataSource"
+                 matSort
+                 #sort1="matSort"
+                 matSortActive="id"
+                 matSortDirection="asc"
+                 matSortDisableClear>
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef class="mat-column-checkbox">
+            <mat-checkbox (change)="$event"
+                          [checked]="selection.hasValue()"
+                          [indeterminate]="selection.hasValue()"
+                          [color]="'primary'">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row" class="mat-column-checkbox">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)"
+                          [color]="'primary'">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="uniq_id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-vinCode">Identifiant</mat-header-cell>
+          <mat-cell *matCellDef="let product" class="mat-column-vinCode">{{product.uniq_id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="user_id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Client</mat-header-cell>
+          <mat-cell *matCellDef="let product">{{product.user_id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="product_id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Produit</mat-header-cell>
+          <mat-cell *matCellDef="let product">{{product.product_id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="qte">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Qté</mat-header-cell>
+          <mat-cell *matCellDef="let product">{{product.qte}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="unit_price">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Prix Unitaire</mat-header-cell>
+          <mat-cell *matCellDef="let product">€{{product.unit_price}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="date_time">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Date achat</mat-header-cell>
+          <mat-cell *matCellDef="let product">{{product.date_time}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="confirmed">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Statut</mat-header-cell>
+          <mat-cell *matCellDef="let product">{{product.confirmed}}</mat-cell>
+        </ng-container>
+
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+      <div class="mat-table__message" *ngIf="!dataSource.hasItems">Aucun enregistrement trouvé</div>
+      <div class="mat-table__message" *ngIf="(dataSource.totalSize | async) === 0">Patientez svp....</div>
+    </div>
+
+    <!-- start: BOTTOM -->
+    <div class="mat-table__bottom">
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="dataSource.totalSize | async"
+                     [showFirstLastButtons]="true"></mat-paginator>
+    </div>
+    <!-- end: BOTTOM -->
+  </kt-portlet-body>
+  <!-- end::Body -->
+</kt-portlet>

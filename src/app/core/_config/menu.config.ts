@@ -17,20 +17,10 @@ export class MenuConfig {
           toggle: 'click',
           submenu: [
             {
-              title: 'Produit & Clients',
+              title: 'Catalogue produits',
               bullet: 'dot',
               icon: 'flaticon-business',
-              permission: 'accessToECommerceModule',
-              submenu: [
-                {
-                  title: 'Clients',
-                  page: '/ecommerce/customers'
-                },
-                {
-                  title: 'Produits',
-                  page: '/ecommerce/products'
-                },
-              ]
+              page: '/ecommerce/products',
             },
             {
               title: 'Gestion des Utilisateurs',
@@ -38,7 +28,7 @@ export class MenuConfig {
               icon: 'flaticon-user',
               submenu: [
                 {
-                  title: 'Utilisateurs',
+                  title: 'Utilisateurs/Clients',
                   page: '/user-management/users'
                 },
                 {
@@ -80,17 +70,7 @@ export class MenuConfig {
           bullet: 'dot',
           icon: 'flaticon2-list-2',
           root: true,
-          permission: 'accessToECommerceModule',
-          submenu: [
-            {
-              title: 'Clients',
-              page: '/ecommerce/customers'
-            },
-            {
-              title: 'Produits',
-              page: '/ecommerce/products'
-            },
-          ]
+          page: '/ecommerce/products'
         },
         {
           title: 'Gestion des Utilisateurs',
@@ -99,7 +79,7 @@ export class MenuConfig {
           icon: 'flaticon2-user-outline-symbol',
           submenu: [
             {
-              title: 'Utilisateurs',
+              title: 'Utilisateurs/Clients',
               page: '/user-management/users'
             },
             {

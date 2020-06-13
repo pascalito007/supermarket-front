@@ -15,11 +15,12 @@ export class User extends BaseModel {
   occupation: string;
   companyName: string;
   phone: string;
-  address: Address;
-  socialNetworks: SocialNetworks;
+  addressLine: string;
+  city: string;
+  state: string;
+  postCode: string;
 
   clear(): void {
-    this.id = undefined;
     this.username = '';
     this.password = '';
     this.email = '';
@@ -31,9 +32,5 @@ export class User extends BaseModel {
     this.occupation = '';
     this.companyName = '';
     this.phone = '';
-    this.address = new Address();
-    this.address.clear();
-    this.socialNetworks = new SocialNetworks();
-    this.socialNetworks.clear();
   }
 }

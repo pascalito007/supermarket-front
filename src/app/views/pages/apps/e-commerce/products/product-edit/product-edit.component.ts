@@ -26,10 +26,7 @@ import {
 } from '../../../../../../core/e-commerce';
 import {v4 as uuid} from 'uuid';
 import {uniq} from 'lodash';
-
-const AVAILABLE_COLORS: string[] =
-  ['Red', 'CadetBlue', 'Gold', 'LightSlateGrey', 'RoyalBlue', 'Crimson', 'Blue', 'Sienna', 'Indigo', 'Green', 'Violet',
-    'GoldenRod', 'OrangeRed', 'Khaki', 'Teal', 'Purple', 'Orange', 'Pink', 'Black', 'DarkTurquoise'];
+import {AngularFireDatabase} from '@angular/fire/database';
 
 const AVAILABLE_MANUFACTURES: string[] =
   ['Pontiac', 'Subaru', 'Mitsubishi', 'Oldsmobile', 'Chevrolet', 'Chrysler', 'Suzuki', 'GMC', 'Cadillac', 'Mercury', 'Dodge',
@@ -52,7 +49,6 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   productForm: FormGroup;
   hasFormErrors = false;
   availableYears: number[] = [];
-  filteredColors: Observable<string[]>;
   filteredManufactures: Observable<string[]>;
   // Private password
   private componentSubscriptions: Subscription;
@@ -72,7 +68,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     private layoutUtilsService: LayoutUtilsService,
     private layoutConfigService: LayoutConfigService,
     private productService: ProductsService,
-    private cdr: ChangeDetectorRef) {
+    private cdr: ChangeDetectorRef, private db: AngularFireDatabase) {
   }
 
 
@@ -87,16 +83,14 @@ export class ProductEditComponent implements OnInit, OnDestroy {
         );
     });
 
-    for (let i = 2019; i > 1945; i--) {
-      this.availableYears.push(i);
-    }
+
     this.loading$ = this.loadingSubject.asObservable();
     this.loadingSubject.next(true);
     this.activatedRoute.params.subscribe(params => {
       const id = params.id;
-      if (id && id > 0) {
-
-        this.store.pipe(
+      if (id && id >= 0) {
+        this.loadProd(id);
+        /*this.store.pipe(
           select(selectProductById(id))
         ).subscribe(result => {
           if (!result) {
@@ -105,7 +99,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
           }
 
           this.loadProduct(result);
-        });
+        });*/
       } else {
         const newProduct = new ProductModel();
         newProduct.clear();
@@ -118,6 +112,17 @@ export class ProductEditComponent implements OnInit, OnDestroy {
       const style = getComputedStyle(document.getElementById('kt_header'));
       this.headerMargin = parseInt(style.height, 0);
     };
+  }
+
+  async loadProd(id: string) {
+    await this.db.object('products/' + id).valueChanges().subscribe((product: any) => {
+      this.product = product;
+      this.productId$ = of(product.id);
+      this.productId$.subscribe(console.log);
+      this.oldProduct = Object.assign({}, product);
+      this.initProduct();
+      this.cdr.detectChanges();
+    });
   }
 
   loadProduct(_product, fromService: boolean = false) {
@@ -179,6 +184,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     this.productForm = this.productFB.group({
       product_name: [this.product.product_name, Validators.required],
       manufacturer: [this.product.manufacturer, Validators.required],
+      photoUrl: [this.product.photoUrl],
       number_available_in_stock: [this.product.number_available_in_stock, Validators.required],
       price: [this.product.price, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
       product_description: [this.product.product_description],
@@ -196,15 +202,6 @@ export class ProductEditComponent implements OnInit, OnDestroy {
       option.toLowerCase().includes(val.toLowerCase())) : [''];
   }
 
-  /**
-   * Filter color
-   *
-   * @param val: string
-   */
-  filterColor(val: string): string[] {
-    return AVAILABLE_COLORS.filter(option =>
-      option.toLowerCase().includes(val.toLowerCase()));
-  }
 
   /**
    * Go back to the list
@@ -292,10 +289,8 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     _product.product_name = controls.product_name.value;
     _product.manufacturer = controls.manufacturer.value;
     _product.number_available_in_stock = controls.number_available_in_stock.value;
-    _product.number_of_reviews = this.product.number_of_reviews;
-    _product.number_of_answered_questions = this.product.number_of_answered_questions;
-    _product.average_review_rating = this.product.average_review_rating;
     _product.price = controls.price.value;
+    _product.photoUrl = controls.photoUrl.value;
     return _product;
   }
 
@@ -305,25 +300,21 @@ export class ProductEditComponent implements OnInit, OnDestroy {
    * @param _product: ProductModel
    * @param withBack: boolean
    */
-  addProduct(_product: ProductModel, withBack: boolean = false) {
+  async addProduct(_product: ProductModel, withBack: boolean = false) {
     this.loadingSubject.next(true);
+    _product.id = uuid();
+    _product.uniq_id = uuid();
+    const id = await this.db.createPushId();
+    await this.db.list('products/').push(Object.assign({}, _product));
     this.store.dispatch(new ProductOnServerCreated({product: _product}));
     this.componentSubscriptions = this.store.pipe(
       delay(1000),
       select(selectLastCreatedProductId)
     ).subscribe(newId => {
-      if (!newId) {
-        return;
-      }
-
       this.loadingSubject.next(false);
-      if (withBack) {
-        this.goBack(newId);
-      } else {
-        const message = `Nouveau produit correctement ajouté.`;
-        this.layoutUtilsService.showActionNotification(message, MessageType.Create, 10000, true, true);
-        this.refreshProduct(true, newId);
-      }
+      const message = `Nouveau produit correctement ajouté.`;
+      this.layoutUtilsService.showActionNotification(message, MessageType.Create, 10000, true, true);
+      this.refreshProduct(true, newId + '');
     });
   }
 
@@ -366,7 +357,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
       return result;
     }
 
-    result = `Modifier produit - ${this.product.manufacture} ${this.product.model}, ${this.product.modelYear}`;
+    result = `Modifier produit - ${this.product.manufacture}`;
     return result;
   }
 

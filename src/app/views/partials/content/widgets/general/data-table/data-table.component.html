@@ -22,11 +22,6 @@
 			<td mat-cell *matCellDef="let product">{{product.number_available_in_stock}}</td>
 		</ng-container>
 
-		<ng-container matColumnDef="number_of_reviews">
-			<th mat-header-cell *matHeaderCellDef mat-sort-header>Nb Notes</th>
-			<td mat-cell *matCellDef="let product">{{product.number_of_reviews}}</td>
-		</ng-container>
-
 		<ng-container matColumnDef="price">
 			<th mat-header-cell *matHeaderCellDef mat-sort-header>Prix</th>
 			<td mat-cell *matCellDef="let product">${{product.price}}</td>
