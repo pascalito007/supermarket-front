@@ -26,16 +26,7 @@ export class MenuConfig {
               title: 'Gestion des Utilisateurs',
               bullet: 'dot',
               icon: 'flaticon-user',
-              submenu: [
-                {
-                  title: 'Utilisateurs/Clients',
-                  page: '/user-management/users'
-                },
-                {
-                  title: 'Roles',
-                  page: '/user-management/roles'
-                }
-              ]
+              page: '/user-management/users',
             },
           ]
         },
@@ -77,16 +68,7 @@ export class MenuConfig {
           root: true,
           bullet: 'dot',
           icon: 'flaticon2-user-outline-symbol',
-          submenu: [
-            {
-              title: 'Utilisateurs/Clients',
-              page: '/user-management/users'
-            },
-            {
-              title: 'Roles',
-              page: '/user-management/roles'
-            }
-          ]
+          page: '/user-management/users',
         },
       ]
     },

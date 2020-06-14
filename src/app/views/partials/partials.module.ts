@@ -43,7 +43,6 @@ import {
 import {
   LanguageSelectorComponent,
   NotificationComponent,
-  QuickActionComponent,
   ScrollTopComponent,
   SearchDefaultComponent,
   SearchDropdownComponent,
@@ -57,7 +56,6 @@ import {
   SubheaderSearchComponent,
   UserProfile2Component,
   UserProfile3Component,
-  UserProfileComponent,
 } from './layout';
 // General
 import {NoticeComponent} from './content/general/notice/notice.component';
@@ -68,7 +66,6 @@ import {ErrorComponent} from './content/general/error/error.component';
 import {WidgetModule} from './content/widgets/widget.module';
 // SVG inline
 import {InlineSVGModule} from 'ng-inline-svg';
-import {CartComponent} from './layout/topbar/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -92,14 +89,10 @@ import {CartComponent} from './layout/topbar/cart/cart.component';
     SubheaderSearchComponent,
     LanguageSelectorComponent,
     NotificationComponent,
-    QuickActionComponent,
     SearchDefaultComponent,
     SearchDropdownComponent,
-    UserProfileComponent,
     UserProfile2Component,
     UserProfile3Component,
-    CartComponent,
-
     ErrorComponent,
   ],
   exports: [
@@ -126,14 +119,10 @@ import {CartComponent} from './layout/topbar/cart/cart.component';
     SubheaderSearchComponent,
     LanguageSelectorComponent,
     NotificationComponent,
-    QuickActionComponent,
     SearchDefaultComponent,
     SearchDropdownComponent,
-    UserProfileComponent,
     UserProfile2Component,
     UserProfile3Component,
-    CartComponent,
-
     ErrorComponent,
   ],
   imports: [

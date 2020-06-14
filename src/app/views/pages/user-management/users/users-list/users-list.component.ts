@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatPaginator, MatSort} from '@angular/material';
 // RXJS
-import {debounceTime, distinctUntilChanged, tap, skip, take, delay} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import {fromEvent, merge, of, Subscription} from 'rxjs';
 // LODASH
 import {each, find} from 'lodash';
@@ -35,7 +35,7 @@ import {AngularFireDatabase} from '@angular/fire/database';
 export class UsersListComponent implements OnInit, OnDestroy {
   // Table fields
   dataSource: UsersDataSource;
-  displayedColumns = ['select', 'id', 'username', 'email', 'fullname', '_roles', 'actions'];
+  displayedColumns = ['select', 'userName', 'email', 'fullName', 'address', 'phone', '_roles', 'actions'];
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild('sort1', {static: true}) sort: MatSort;
   // Filter fields
@@ -73,13 +73,13 @@ export class UsersListComponent implements OnInit, OnDestroy {
     - when a pagination event occurs => this.paginator.page
     - when a sort event occurs => this.sort.sortChange
     **/
-    const paginatorSubscriptions = merge(this.sort.sortChange, this.paginator.page).pipe(
+    /*const paginatorSubscriptions = merge(this.sort.sortChange, this.paginator.page).pipe(
       tap(() => {
         this.loadUsersList();
       })
     )
       .subscribe();
-    this.subscriptions.push(paginatorSubscriptions);
+    this.subscriptions.push(paginatorSubscriptions);*/
 
 
     // Filtration, bind to searchInput
@@ -100,19 +100,15 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     // Init DataSource
     this.dataSource = new UsersDataSource(this.store, this.db);
-    const entitiesSubscription = this.dataSource.entitySubject.pipe(
-      skip(1),
-      distinctUntilChanged()
-    ).subscribe(res => {
-      console.log(res);
+    const entitiesSubscription = this.dataSource.entitySubject.subscribe(res => {
       this.usersResult = res;
     });
     this.subscriptions.push(entitiesSubscription);
 
     // First Load
-    of(undefined).pipe(take(1), delay(1000)).subscribe(() => { // Remove this line, just loading imitation
-      this.loadUsersList();
-    });
+    // of(undefined).pipe(take(1), delay(1000)).subscribe(() => { // Remove this line, just loading imitation
+    //   this.loadUsersList();
+    // });
   }
 
   /**
@@ -126,16 +122,16 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * Load users list
    */
   loadUsersList() {
-    this.selection.clear();
-    const queryParams = new QueryParamsModel(
-      this.filterConfiguration(),
-      this.sort.direction,
-      this.sort.active,
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    );
-    this.store.dispatch(new UsersPageRequested({page: queryParams}));
-    this.selection.clear();
+    // this.selection.clear();
+    // const queryParams = new QueryParamsModel(
+    //   this.filterConfiguration(),
+    //   this.sort.direction,
+    //   this.sort.active,
+    //   //this.paginator.pageIndex,
+    //   this.paginator.pageSize
+    //);
+    //this.store.dispatch(new UsersPageRequested({page: queryParams}));
+    //this.selection.clear();
   }
 
   /** FILTRATION */
@@ -157,7 +153,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    *
    * @param _item: User
    */
-  deleteUser(_item: User) {
+  deleteUser(_item: any) {
     const _title = 'Suppression Utilisateur';
     const _description = 'Etes vous sûr de supprimer cet Utilisateur?';
     const _waitDesciption = 'Suppression en cours...';
@@ -169,7 +165,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.store.dispatch(new UserDeleted({id: _item.id}));
+      this.store.dispatch(new UserDeleted({id: _item.key}));
+      this.db.object('users/' + _item.key).remove();
       this.layoutUtilsService.showActionNotification(_deleteMessage, MessageType.Delete);
     });
   }
@@ -181,9 +178,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
     const messages = [];
     this.selection.selected.forEach(elem => {
       messages.push({
-        text: `${elem.fullname}, ${elem.email}`,
+        text: `${elem.fullName}, ${elem.email}`,
         id: elem.id.toString(),
-        status: elem.username
+        status: elem.userName
       });
     });
     this.layoutUtilsService.fetchElements(messages);
@@ -216,11 +213,11 @@ export class UsersListComponent implements OnInit, OnDestroy {
    * @param user: User
    */
   getUserRolesStr(user: User): string {
-    const titles: string[] = [];
+    let titles: string[] = [''];
     each(user.roles, (roleId: number) => {
-      const _role = find(this.allRoles, (role: Role) => role.id === roleId);
+      const _role = find(this.allRoles, (role: any) => role.key === roleId);
       if (_role) {
-        titles.push(_role.title);
+        titles.push(_role.name);
       }
     });
     return titles.join(', ');
@@ -231,7 +228,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
    *
    * @param id
    */
-  editUser(id) {
-    this.router.navigate(['../users/edit', id], {relativeTo: this.activatedRoute});
+  editUser(key) {
+    this.router.navigate(['../users/edit', key], {relativeTo: this.activatedRoute});
   }
 }

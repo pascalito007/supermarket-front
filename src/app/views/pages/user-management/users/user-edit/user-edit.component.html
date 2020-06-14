@@ -1,132 +1,117 @@
 <kt-portlet>
-	<kt-portlet-header [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'" [viewLoading$]="loading$">
-		<ng-container ktPortletTools>
-			<a [routerLink]="['../../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button matTooltip="Back to the users list">
-				<i class="la la-arrow-left"></i>
-				<span class="kt-hidden-mobile">Retour</span>
-			</a>
-			<a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" [disabled]="selectedTab !== 0" mat-raised-button matTooltip="Reset changes">
-				<i class="la la-cog"></i>
-				<span class="kt-hidden-mobile">Reinitialiser</span>
-			</a>
-			<a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)" mat-raised-button matTooltip="Save & Continue">
-				<span class="kt-hidden-mobile">Enregistrer</span>
-			</a>
-		</ng-container>
-	</kt-portlet-header>
+  <kt-portlet-header [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'">
+    <ng-container ktPortletTools>
+      <a (click)="goBackWithoutId()" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+         matTooltip="Back to the users list">
+        <i class="la la-arrow-left"></i>
+        <span class="kt-hidden-mobile">Retour</span>
+      </a>
+      <a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" [disabled]="selectedTab !== 0"
+         mat-raised-button matTooltip="Reset changes">
+        <i class="la la-cog"></i>
+        <span class="kt-hidden-mobile">Reinitialiser</span>
+      </a>
+      <a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)"
+         mat-raised-button matTooltip="Save & Continue">
+        <span class="kt-hidden-mobile">Enregistrer</span>
+      </a>
+    </ng-container>
+  </kt-portlet-header>
 
-	<kt-portlet-body>
-		<mat-tab-group [(selectedIndex)]="selectedTab">
-			<mat-tab>
-				<ng-template mat-tab-label>
-					<i class="mat-tab-label-icon fa fa-user"></i>
-					Informations de base
-				</ng-template>
-				<ng-template matTabContent>
-					<!--begin::Form-->
-					<div *ngIf="user">
-						<form [formGroup]="userForm" class="kt-form kt-form--group-seperator-dashed">
+  <kt-portlet-body>
+    <mat-tab-group [(selectedIndex)]="selectedTab">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <i class="mat-tab-label-icon fa fa-user"></i>
+          Informations de base
+        </ng-template>
+        <ng-template matTabContent>
+          <!--begin::Form-->
+          <div *ngIf="user">
+            <form [formGroup]="userForm" class="kt-form kt-form--group-seperator-dashed">
 
-							<kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000" (close)="onAlertClose($event)">
-								Oh ! Une erreur s'est produite, veuillez réessayer
-							</kt-alert>
-							<div class="kt-form__section kt-form__section--first">
-								<div class="form-group kt-form__group row">
-									<div class="col-lg-4 kt-margin-bottom-20-mobile">
-										<mat-form-field class="mat-form-field-fluid">
-											<input matInput placeholder="Enter Username" formControlName="username"/>
-											<mat-error>Nom d'utilisateur
-												<strong>obligatoire</strong>
-											</mat-error>
-											<mat-hint align="start">
-												<strong>Nom d'utilisateur</strong>
-											</mat-hint>
-										</mat-form-field>
-									</div>
-									<div class="col-lg-4 kt-margin-bottom-20-mobile">
-										<mat-form-field class="mat-form-field-fluid">
-											<input matInput placeholder="Enter Full Name" formControlName="fullname"/>
-											<mat-error>Nom Complet
-												<strong>obligatoire</strong>
-											</mat-error>
-											<mat-hint align="start">
-												<strong>Nom Complet</strong>
-											</mat-hint>
-										</mat-form-field>
-									</div>
+              <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                        (close)="onAlertClose($event)">
+                Oh ! Une erreur s'est produite, veuillez réessayer
+              </kt-alert>
+              <div class="kt-form__section kt-form__section--first">
+                <div class="form-group kt-form__group row">
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Saisissez nom d'utilisateur" formControlName="userName"/>
+                      <mat-error>Nom d'utilisateur
+                        <strong>obligatoire</strong>
+                      </mat-error>
+                      <mat-hint align="start">
+                        <strong>Nom d'utilisateur</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Saisissez le nom complet" formControlName="fullName"/>
+                      <mat-error>Nom Complet
+                        <strong>obligatoire</strong>
+                      </mat-error>
+                      <mat-hint align="start">
+                        <strong>Nom Complet</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
 
-									<div class="col-lg-4 kt-margin-bottom-20-mobile">
-										<mat-form-field class="mat-form-field-fluid">
-											<input type="email" matInput placeholder="Enter Email" formControlName="email"/>
-											<mat-error>Email est
-												<strong>obligatoire</strong>
-											</mat-error>
-											<mat-hint align="start">
-												<strong>Email</strong>
-											</mat-hint>
-										</mat-form-field>
-									</div>
-								</div>
-								<div class="form-group kt-form__group row">
-									<div class="col-lg-4 kt-margin-bottom-20-mobile">
-										<mat-form-field class="mat-form-field-fluid">
-											<input matInput placeholder="Enter Occupation" formControlName="occupation"/>
-											<mat-hint align="start">
-												<strong>Occupation</strong>
-											</mat-hint>
-										</mat-form-field>
-									</div>
-									<div class="col-lg-4 kt-margin-bottom-20-mobile">
-										<mat-form-field class="mat-form-field-fluid">
-											<input matInput placeholder="Enter Company Name" formControlName="companyName"/>
-											<mat-hint align="start">
-												<strong>Société</strong>
-											</mat-hint>
-										</mat-form-field>
-									</div>
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input type="email" matInput placeholder="Saisissez l'email" formControlName="email"/>
+                      <mat-error>Email est
+                        <strong>obligatoire</strong>
+                      </mat-error>
+                      <mat-hint align="start">
+                        <strong>Email</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="form-group kt-form__group row">
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Renseignez l'adresse" formControlName="address"/>
+                      <mat-error>Addresse est
+                        <strong>obligatoire</strong>
+                      </mat-error>
+                      <mat-hint align="start">saisissez
+                        <strong>l'adresse</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
 
-									<div class="col-lg-4 kt-margin-bottom-20-mobile">
-										<mat-form-field class="mat-form-field-fluid">
-											<input matInput placeholder="Enter Phone" formControlName="phone"/>
-											<mat-hint align="start">
-												<strong>Téléphone</strong>
-											</mat-hint>
-										</mat-form-field>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-					<!--end::Form-->
-				</ng-template>
-			</mat-tab>
-			<mat-tab [disabled]="!user || !user.id">
-				<ng-template mat-tab-label>
-					<i class="mat-tab-label-icon fa fa-address-book"></i>
-					Adresse Utilisateur
-				</ng-template>
-				<ng-template matTabContent>
-					<kt-address [(addressSubject)]="addressSubject"></kt-address>
-				</ng-template>
-			</mat-tab>
-			<mat-tab *ngIf="user" [disabled]="!user || !user.id">
-				<ng-template mat-tab-label>
-					<i class="mat-tab-label-icon fa fa-unlock"></i>
-					Role Utilisateur
-				</ng-template>
-				<ng-template matTabContent>
-					<kt-user-roles-list [(rolesSubject)]="rolesSubject"></kt-user-roles-list>
-				</ng-template>
-			</mat-tab>
-			<mat-tab *ngIf="user" [disabled]="!user || !user.id">
-				<ng-template mat-tab-label>
-					<i class="mat-tab-label-icon fa fa-exchange-alt"></i>
-					Changer de mot mot de passe
-				</ng-template>
-				<ng-template matTabContent>
-					<kt-change-password [userId]="user.id"></kt-change-password>
-				</ng-template>
-			</mat-tab>
-		</mat-tab-group>
-	</kt-portlet-body>
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput placeholder="Renseignez le numéro de téléphone" formControlName="phone"/>
+                      <mat-hint align="start">
+                        <strong>Téléphone</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput type="password" id="password" autocomplete="off"
+                             placeholder="saisissez le mot de passe" formControlName="password"/>
+                      <mat-error>Mot de passe est
+                        <strong>obligatoire</strong>
+                      </mat-error>
+                      <mat-hint align="start">Svp renseignez
+                        <strong>le mot de passe</strong>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!--end::Form-->
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </kt-portlet-body>
 </kt-portlet>

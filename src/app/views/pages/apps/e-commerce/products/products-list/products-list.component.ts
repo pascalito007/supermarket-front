@@ -25,7 +25,6 @@ import {
   selectProductsPageLastQuery
 } from '../../../../../../core/e-commerce';
 import {AngularFireDatabase} from '@angular/fire/database';
-import {FirebaseListObservable} from '@angular/fire/database-deprecated';
 import {v4 as uuid} from 'uuid';
 
 

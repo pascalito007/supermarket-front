@@ -18,12 +18,6 @@ export class UsersTable {
         city: 'San Francisco',
         state: 'California',
         postCode: '45000'
-      },
-      socialNetworks: {
-        linkedIn: 'https://linkedin.com/admin',
-        facebook: 'https://facebook.com/admin',
-        twitter: 'https://twitter.com/admin',
-        instagram: 'https://instagram.com/admin'
       }
     },
     {

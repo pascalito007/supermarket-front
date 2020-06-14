@@ -1,13 +1,12 @@
 // RxJS
-import {of} from 'rxjs';
-import {catchError, finalize, tap, debounceTime, delay, distinctUntilChanged} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
 // NGRX
 import {Store} from '@ngrx/store';
 // CRUD
 import {BaseDataSource} from '../../_base/crud';
 // State
 import {AppState} from '../../../core/reducers';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireDatabase} from '@angular/fire/database';
 
 
@@ -17,7 +16,16 @@ export class UsersDataSource extends BaseDataSource {
   }
 
   connect() {
-    return this.db.list('users').valueChanges();
+    const items: Observable<any[]> = this.db.list('users')
+      .snapshotChanges().pipe(
+        map(changes =>
+          changes.map((c: any) => {
+            const user = c.payload.val();
+            console.log({key: c.payload.key, _user: user});
+            return ({key: c.payload.key, ...user});
+          })
+        ));
+    return items;
   }
 
 

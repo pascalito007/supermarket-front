@@ -55,10 +55,9 @@ export class AuthService {
   }
 
   register(user: User): Observable<any> {
-    user.roles = [2]; // Manager
+    //user.roles = [2]; // Manager
     user.accessToken = 'access-token-' + Math.random();
     user.refreshToken = 'access-token-' + Math.random();
-    user.pic = './assets/media/users/default.jpg';
 
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
@@ -179,57 +178,6 @@ export class AuthService {
     );
   }
 
-  // Permissions
-  getAllPermissions(): Observable<Permission[]> {
-    return this.http.get<Permission[]>(API_PERMISSION_URL);
-  }
-
-  getRolePermissions(roleId: number): Observable<Permission[]> {
-    const allRolesRequest = this.http.get<Permission[]>(API_PERMISSION_URL);
-    const roleRequest = roleId ? this.getRoleById(roleId) : of(null);
-    return forkJoin(allRolesRequest, roleRequest).pipe(
-      map(res => {
-        const _allPermissions: Permission[] = res[0];
-        const _role: Role = res[1];
-        if (!_allPermissions || _allPermissions.length === 0) {
-          return [];
-        }
-
-        const _rolePermission = _role ? _role.permissions : [];
-        const result: Permission[] = this.getRolePermissionsTree(_allPermissions, _rolePermission);
-        return result;
-      })
-    );
-  }
-
-  private getRolePermissionsTree(_allPermission: Permission[] = [], _rolePermissionIds: number[] = []): Permission[] {
-    const result: Permission[] = [];
-    const _root: Permission[] = filter(_allPermission, (item: Permission) => !item.parentId);
-    each(_root, (_rootItem: Permission) => {
-      _rootItem._children = [];
-      _rootItem._children = this.collectChildrenPermission(_allPermission, _rootItem.id, _rolePermissionIds);
-      _rootItem.isSelected = (some(_rolePermissionIds, (id: number) => id === _rootItem.id));
-      result.push(_rootItem);
-    });
-    return result;
-  }
-
-  private collectChildrenPermission(_allPermission: Permission[] = [],
-                                    _parentId: number, _rolePermissionIds: number[] = []): Permission[] {
-    const result: Permission[] = [];
-    const _children: Permission[] = filter(_allPermission, (item: Permission) => item.parentId === _parentId);
-    if (_children.length === 0) {
-      return result;
-    }
-
-    each(_children, (_childItem: Permission) => {
-      _childItem._children = [];
-      _childItem._children = this.collectChildrenPermission(_allPermission, _childItem.id, _rolePermissionIds);
-      _childItem.isSelected = (some(_rolePermissionIds, (id: number) => id === _childItem.id));
-      result.push(_childItem);
-    });
-    return result;
-  }
 
   // Roles
   getAllRoles(): Observable<Role[]> {

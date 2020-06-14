@@ -1,24 +1,26 @@
-<div ngbDropdown placement="bottom-right" *ngIf="afAuth.user | async as _user" class="kt-header__topbar-item kt-header__topbar-item--user">
-	<div ngbDropdownToggle class="kt-header__topbar-wrapper">
-		<span class="kt-header__topbar-welcome">Salut,</span>
-		<span class="kt-header__topbar-username">{{_user.displayName}}</span>
-		<span class="kt-header__topbar-icon"><b>{{_user.email|firstLetter}}</b></span>
-	</div>
-	<div ngbDropdownMenu class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl">
-		<!--begin: Navigation -->
-		<div class="kt-notification">
-			<div class="kt-notification__custom">
-				<a href="javascript:;" (click)="logout()" class="btn btn-label-brand btn-sm btn-bold">Se déconnecter</a>
-			</div>
-		</div>
-		<!--end: Navigation -->
+<div ngbDropdown placement="bottom-right" *ngIf="user$ | async as _user"
+     class="kt-header__topbar-item kt-header__topbar-item--user">
+  <div ngbDropdownToggle class="kt-header__topbar-wrapper">
+    <span class="kt-header__topbar-welcome">Salut,</span>
+    <span class="kt-header__topbar-username">{{_user.fullName}}</span>
+    <span class="kt-header__topbar-icon"><b>{{_user.email|firstLetter}}</b></span>
+  </div>
+  <div ngbDropdownMenu
+       class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl">
+    <!--begin: Navigation -->
+    <div class="kt-notification">
+      <div class="kt-notification__custom">
+        <a href="javascript:;" (click)="logout()" class="btn btn-label-brand btn-sm btn-bold">Se déconnecter</a>
+      </div>
+    </div>
+    <!--end: Navigation -->
 
-		<!--begin: Navigation(alternative) -->
-		<ul class="kt-nav kt-margin-b-10 kt-hidden">
-			<li class="kt-nav__item kt-nav__item--custom kt-margin-t-15">
-				<a (click)="logout()" class="btn btn-label-brand btn-sm btn-bold">Se déconnecter</a>
-			</li>
-		</ul>
-		<!--end: Navigation(alternative) -->
-	</div>
+    <!--begin: Navigation(alternative) -->
+    <ul class="kt-nav kt-margin-b-10 kt-hidden">
+      <li class="kt-nav__item kt-nav__item--custom kt-margin-t-15">
+        <a (click)="logout()" class="btn btn-label-brand btn-sm btn-bold">Se déconnecter</a>
+      </li>
+    </ul>
+    <!--end: Navigation(alternative) -->
+  </div>
 </div>

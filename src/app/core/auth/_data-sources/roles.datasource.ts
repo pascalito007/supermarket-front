@@ -1,33 +1,30 @@
 // RxJS
-import { of } from 'rxjs';
-import { catchError, finalize, tap, debounceTime, delay, distinctUntilChanged } from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError, finalize, tap, debounceTime, delay, distinctUntilChanged, map} from 'rxjs/operators';
 // NGRX
-import { Store, select } from '@ngrx/store';
 // CRUD
-import { BaseDataSource, QueryResultsModel } from '../../_base/crud';
+import {BaseDataSource} from '../../_base/crud';
 // State
-import { AppState } from '../../../core/reducers';
 // Selectirs
-import { selectQueryResult, selectRolesPageLoading, selectRolesShowInitWaitingMessage } from '../_selectors/role.selectors';
+import {AngularFireDatabase} from '@angular/fire/database';
 
 export class RolesDataSource extends BaseDataSource {
-	constructor(private store: Store<AppState>) {
-		super();
+  constructor(private db: AngularFireDatabase) {
+    super();
+  }
 
-		this.loading$ = this.store.pipe(
-			select(selectRolesPageLoading)
-		);
+  connect(): Observable<any[]> {
+    const items: Observable<any[]> = this.db.list('roles')
+      .snapshotChanges().pipe(
+        map(changes =>
+          changes.map((c: any) => {
+            const product = c.payload.val();
+            return ({key: c.payload.key, ...product});
+          })
+        ));
+    return items;
+  }
 
-		this.isPreloadTextViewed$ = this.store.pipe(
-			select(selectRolesShowInitWaitingMessage)
-		);
-
-		this.store.pipe(
-			select(selectQueryResult)
-		).subscribe((response: QueryResultsModel) => {
-			this.paginatorTotalSubject.next(response.totalCount);
-			this.entitySubject.next(response.items);
-		});
-
-	}
+  disconnect(): void {
+  }
 }

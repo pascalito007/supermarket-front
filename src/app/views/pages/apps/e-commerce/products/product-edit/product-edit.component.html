@@ -1,67 +1,73 @@
 <kt-portlet>
-	<kt-portlet-header [sticky]="true" [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'">
-		<ng-container ktPortletTools>
-			<a (click)="goBackWithoutId()" class="btn btn-secondary kt-margin-r-10"  mat-raised-button matTooltip="Back to the products list">
-				<i class="la la-arrow-left"></i>
-				<span class="kt-hidden-mobile">Retour</span>
-			</a>
-			<a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" [disabled]="selectedTab !== 0" mat-raised-button matTooltip="Reset changes">
-				<i class="la la-cog"></i>
-				<span class="kt-hidden-mobile">Reinitialiser</span>
-			</a>
-			<a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)" mat-raised-button matTooltip="Save & Continue">
-				<span class="kt-hidden-mobile">Enregistrer</span>
-			</a>
-		</ng-container>
-	</kt-portlet-header>
-	<kt-portlet-body>
-		<mat-tab-group [(selectedIndex)]="selectedTab" *ngIf="product">
-			<mat-tab label="Informations de base">
-				<ng-template matTabContent>
-					<div *ngIf="product">
-						<!--begin::Form-->
-						<form [formGroup]="productForm" class="kt-form kt-form--group-seperator-dashed">
+  <kt-portlet-header [sticky]="true" [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'">
+    <ng-container ktPortletTools>
+      <a (click)="goBackWithoutId()" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+         matTooltip="Back to the products list">
+        <i class="la la-arrow-left"></i>
+        <span class="kt-hidden-mobile">Retour</span>
+      </a>
+      <a href="javascript:;" class="btn btn-secondary kt-margin-r-10" (click)="reset()" [disabled]="selectedTab !== 0"
+         mat-raised-button matTooltip="Reset changes">
+        <i class="la la-cog"></i>
+        <span class="kt-hidden-mobile">Reinitialiser</span>
+      </a>
+      <a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary" (click)="onSumbit(false)"
+         mat-raised-button matTooltip="Save & Continue">
+        <span class="kt-hidden-mobile">Enregistrer</span>
+      </a>
+    </ng-container>
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <mat-tab-group [(selectedIndex)]="selectedTab" *ngIf="product">
+      <mat-tab label="Informations de base">
+        <ng-template matTabContent>
+          <div *ngIf="product">
+            <!--begin::Form-->
+            <form [formGroup]="productForm" class="kt-form kt-form--group-seperator-dashed">
 
-							<kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000" (close)="onAlertClose($event)">
-								Oh snap! Change a few things up and try submitting again.
-							</kt-alert>
+              <kt-alert *ngIf="hasFormErrors" type="warn" [showCloseButton]="true" [duration]="10000"
+                        (close)="onAlertClose($event)">
+                Oh snap! Change a few things up and try submitting again.
+              </kt-alert>
 
-							<div class="kt-form__section kt-form__section--first">
-								<div class="kt-form__group">
-									<div class="row">
+              <div class="kt-form__section kt-form__section--first">
+                <div class="kt-form__group">
+                  <div class="row">
 
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Saisir Nom de produit" formControlName="product_name">
-												<mat-error>
-													Nom de produit est
-													<strong>obligatoire</strong>
-												</mat-error>
-												<mat-hint align="start">Renseignez svp
-													<strong>Nom de produit</strong>
-												</mat-hint>
-											</mat-form-field>
-										</div>
-										<div class="col-md-4 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<input matInput placeholder="Saisisr le Fabricant" formControlName="manufacturer" [matAutocomplete]="manuf">
-												<mat-autocomplete #manuf="matAutocomplete">
-													<mat-option *ngFor="let manufacture of filteredManufactures | async" [value]="manufacture">
-														{{ manufacture }}
-													</mat-option>
-												</mat-autocomplete>
-												<mat-error>
-													Fabricant est
-													<strong>obligatoire</strong>
-												</mat-error>
-												<mat-hint align="start">Renseignez svp
-													<strong>Fabricant</strong>
-												</mat-hint>
-											</mat-form-field>
-										</div>
                     <div class="col-md-4 kt-margin-bottom-10-mobile">
                       <mat-form-field class="mat-form-field-fluid">
-                        <input matInput placeholder="Saisir Quantité en stock" formControlName="number_available_in_stock">
+                        <input matInput placeholder="Saisir Nom de produit" formControlName="product_name">
+                        <mat-error>
+                          Nom de produit est
+                          <strong>obligatoire</strong>
+                        </mat-error>
+                        <mat-hint align="start">Renseignez svp
+                          <strong>Nom de produit</strong>
+                        </mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4 kt-margin-bottom-10-mobile">
+                      <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="Saisisr le Fabricant" formControlName="manufacturer"
+                               [matAutocomplete]="manuf">
+                        <mat-autocomplete #manuf="matAutocomplete">
+                          <mat-option *ngFor="let manufacture of filteredManufactures | async" [value]="manufacture">
+                            {{ manufacture }}
+                          </mat-option>
+                        </mat-autocomplete>
+                        <mat-error>
+                          Fabricant est
+                          <strong>obligatoire</strong>
+                        </mat-error>
+                        <mat-hint align="start">Renseignez svp
+                          <strong>Fabricant</strong>
+                        </mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-4 kt-margin-bottom-10-mobile">
+                      <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="Saisir Quantité en stock"
+                               formControlName="number_available_in_stock">
                         <mat-error>
                           Quantité en stock est
                           <strong>obligatoire</strong>
@@ -71,8 +77,8 @@
                         </mat-hint>
                       </mat-form-field>
                     </div>
-									</div>
-								</div>
+                  </div>
+                </div>
 
                 <div class="kt-form__group">
                   <div class="row">
@@ -102,7 +108,11 @@
                         </mat-hint>
                       </mat-form-field>
                     </div>
+                  </div>
+                </div>
 
+                <div class="kt-form__group">
+                  <div class="row">
                     <div class="col-md-12 kt-margin-bottom-10-mobile">
                       <mat-form-field class="mat-form-field-fluid">
                         <input matInput placeholder="Saisir l'url de la photo" formControlName="photoUrl">
@@ -115,26 +125,26 @@
                         </mat-hint>
                       </mat-form-field>
                     </div>
-									</div>
+                  </div>
+                </div>
 
-								</div>
+                <div class="kt-form__group">
+                  <div class="row">
+                    <div class="col-md-12 kt-margin-bottom-10-mobile">
+                      <mat-form-field class="mat-form-field-fluid">
+                        <textarea matInput rows="7" placeholder="Saisir la Description du produit"
+                                  formControlName="product_description"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
 
-								<div class="kt-form__group">
-									<div class="row">
-										<div class="col-md-12 kt-margin-bottom-10-mobile">
-											<mat-form-field class="mat-form-field-fluid">
-												<textarea matInput rows="7" placeholder="Saisir la Description du produit" formControlName="product_description"></textarea>
-											</mat-form-field>
-										</div>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-
-					<!--end::Form-->
-				</ng-template>
-			</mat-tab>
-		</mat-tab-group>
-	</kt-portlet-body>
+          <!--end::Form-->
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </kt-portlet-body>
 </kt-portlet>

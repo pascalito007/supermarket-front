@@ -1,5 +1,5 @@
 // Angular
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 // RxJS
@@ -15,16 +15,12 @@ import {LayoutUtilsService, MessageType} from '../../../../../core/_base/crud';
 import {
   User,
   UserUpdated,
-  Address,
-  SocialNetworks,
-  selectHasUsersInStore,
-  selectUserById,
   UserOnServerCreated,
   selectLastCreatedUserId,
   selectUsersActionLoading
 } from '../../../../../core/auth';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFireDatabase} from '@angular/fire/database';
 
 @Component({
   selector: 'kt-user-edit',
@@ -38,24 +34,12 @@ export class UserEditComponent implements OnInit, OnDestroy {
   selectedTab = 0;
   loading$: Observable<boolean>;
   rolesSubject = new BehaviorSubject<number[]>([]);
-  addressSubject = new BehaviorSubject<Address>(new Address());
-  soicialNetworksSubject = new BehaviorSubject<SocialNetworks>(new SocialNetworks());
   userForm: FormGroup;
   hasFormErrors = false;
   // Private properties
   private subscriptions: Subscription[] = [];
 
-  /**
-   * Component constructor
-   *
-   * @param activatedRoute: ActivatedRoute
-   * @param router: Router
-   * @param userFB: FormBuilder
-   * @param subheaderService: SubheaderService
-   * @param layoutUtilsService: LayoutUtilsService
-   * @param store: Store<AppState>
-   * @param layoutConfigService: LayoutConfigService
-   */
+
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private userFB: FormBuilder,
@@ -63,43 +47,45 @@ export class UserEditComponent implements OnInit, OnDestroy {
               private layoutUtilsService: LayoutUtilsService,
               private store: Store<AppState>,
               private layoutConfigService: LayoutConfigService,
-              private afAuth: AngularFireAuth, private afs: AngularFirestore) {
+              private afAuth: AngularFireAuth, private db: AngularFireDatabase,
+              private cdr: ChangeDetectorRef) {
   }
 
-  /**
-   * @ Lifecycle sequences => https://angular.io/guide/lifecycle-hooks
-   */
-
-  /**
-   * On init
-   */
   ngOnInit() {
     this.loading$ = this.store.pipe(select(selectUsersActionLoading));
 
     const routeSubscription = this.activatedRoute.params.subscribe(params => {
       const id = params.id;
-      if (id && id > 0) {
-        this.store.pipe(select(selectUserById(id))).subscribe(res => {
-          if (res) {
-            this.user = res;
-            this.rolesSubject.next(this.user.roles);
-            //this.addressSubject.next(this.user.address);
-            //this.soicialNetworksSubject.next(this.user.socialNetworks);
-            this.oldUser = Object.assign({}, this.user);
-            this.initUser();
-          }
-        });
+      if (id && id.length > 0) {
+        this.loadUser(id);
+        // this.store.pipe(select(selectUserById(id))).subscribe(res => {
+        //   if (res) {
+        //     this.user = res;
+        //     //this.rolesSubject.next(this.user.roles);
+        //     //this.addressSubject.next(this.user.address);
+        //     //this.soicialNetworksSubject.next(this.user.socialNetworks);
+        //     this.oldUser = Object.assign({}, this.user);
+        //     this.initUser();
+        //   }
+        // });
       } else {
         this.user = new User();
         this.user.clear();
-        this.rolesSubject.next(this.user.roles);
-        //this.addressSubject.next(this.user.address);
-        //this.soicialNetworksSubject.next(this.user.socialNetworks);
+        //this.rolesSubject.next(this.user.roles);
         this.oldUser = Object.assign({}, this.user);
         this.initUser();
       }
     });
     this.subscriptions.push(routeSubscription);
+  }
+
+  async loadUser(key: string) {
+    await this.db.object('users/' + key).valueChanges().subscribe((res: any) => {
+      this.user = res;
+      //this.rolesSubject.next(this.user.roles);
+      this.oldUser = Object.assign({}, this.user);
+      this.initUser(key);
+    });
   }
 
   ngOnDestroy() {
@@ -109,10 +95,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
   /**
    * Init user
    */
-  initUser() {
+  initUser(key: string = '') {
     this.createForm();
-    if (!this.user.id) {
-      this.subheaderService.setTitle('Create user');
+    if (!key) {
+      this.subheaderService.setTitle('Ajouter un utilisateur');
       this.subheaderService.setBreadcrumbs([
         {title: 'Gestion des utilisateurs', page: `user-management`},
         {title: 'Utilisateurs', page: `user-management/users`},
@@ -120,12 +106,13 @@ export class UserEditComponent implements OnInit, OnDestroy {
       ]);
       return;
     }
-    this.subheaderService.setTitle('Edit user');
+    this.subheaderService.setTitle('Modifier un utilisateur');
     this.subheaderService.setBreadcrumbs([
       {title: 'Gestion des utilisateurs', page: `user-management`},
       {title: 'Utilisateurs', page: `user-management/users`},
       {title: 'Modifier un utilisateur', page: `user-management/users/edit`, queryParams: {id: this.user.id}}
     ]);
+    this.cdr.detectChanges();
   }
 
   /**
@@ -133,12 +120,12 @@ export class UserEditComponent implements OnInit, OnDestroy {
    */
   createForm() {
     this.userForm = this.userFB.group({
-      username: [this.user.username, Validators.required],
-      fullname: [this.user.fullname, Validators.required],
+      userName: [this.user.userName, Validators.required],
+      fullName: [this.user.fullName, Validators.required],
+      address: [this.user.address],
+      password: [this.user.password, Validators.required],
       email: [this.user.email, Validators.email],
-      phone: [this.user.phone],
-      companyName: [this.user.companyName],
-      occupation: [this.user.occupation]
+      phone: [this.user.phone]
     });
   }
 
@@ -149,6 +136,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
   goBackWithId() {
     const url = `/user-management/users`;
     this.router.navigateByUrl(url, {relativeTo: this.activatedRoute});
+  }
+
+  goBackWithoutId() {
+    this.router.navigateByUrl('/user-management/users', {relativeTo: this.activatedRoute});
   }
 
   /**
@@ -216,17 +207,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
     const controls = this.userForm.controls;
     const _user = new User();
     _user.clear();
-    _user.roles = this.rolesSubject.value;
     _user.accessToken = this.user.accessToken;
     _user.refreshToken = this.user.refreshToken;
-    _user.pic = this.user.pic;
-    _user.username = controls.username.value;
+    _user.userName = controls.userName.value;
     _user.email = controls.email.value;
-    _user.fullname = controls.fullname.value;
-    _user.occupation = controls.occupation.value;
+    _user.fullName = controls.fullName.value;
     _user.phone = controls.phone.value;
-    _user.companyName = controls.companyName.value;
-    _user.password = this.user.password;
+    _user.address = controls.address.value;
+    _user.password = controls.password.value;
     return _user;
   }
 
@@ -237,13 +225,17 @@ export class UserEditComponent implements OnInit, OnDestroy {
    * @param withBack: boolean
    */
   async addUser(_user: User, withBack: boolean = false) {
-    const response = await this.afAuth.auth.createUserWithEmailAndPassword(_user.email, '123456');
-    await response.user.updateProfile({displayName: _user.fullname});
+    const response = await this.afAuth.auth.createUserWithEmailAndPassword(_user.email, _user.password);
+    _user.password = null;
+    _user.accessToken = null;
+    _user.refreshToken = null;
+    await this.db.object('users/' + response.user.email.replace('.', ',')).set(Object.assign({}, _user));
+    await response.user.updateProfile({displayName: _user.fullName});
     this.store.dispatch(new UserOnServerCreated({user: _user}));
     const user = await this.afAuth.auth.currentUser;
-    await this.afs.doc('users/' + this.afs.createId()).set(Object.assign({}, _user));
+    //await this.afs.doc('users/' + this.afs.createId()).set(Object.assign({}, _user));
     const addSubscription = this.store.pipe(select(selectLastCreatedUserId)).subscribe(newId => {
-      const message = `New user successfully has been added.`;
+      const message = `Nouvel utilisateur correctement enregistré.`;
       this.layoutUtilsService.showActionNotification(message, MessageType.Create, 5000, true, true);
       if (newId) {
         if (withBack) {
@@ -271,7 +263,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
       changes: _user
     };
     this.store.dispatch(new UserUpdated({partialUser: updatedUser, user: _user}));
-    const message = `User successfully has been saved.`;
+    const message = `Utilisateur correctement enregistré.`;
     this.layoutUtilsService.showActionNotification(message, MessageType.Update, 5000, true, true);
     if (withBack) {
       this.goBackWithId();
@@ -284,12 +276,12 @@ export class UserEditComponent implements OnInit, OnDestroy {
    * Returns component title
    */
   getComponentTitle() {
-    let result = 'Create user';
+    let result = 'Ajout utilisateur';
     if (!this.user || !this.user.id) {
       return result;
     }
 
-    result = `Edit user - ${this.user.fullname}`;
+    result = `Modification utilisateur - ${this.user.fullName}`;
     return result;
   }
 
